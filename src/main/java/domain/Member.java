@@ -8,22 +8,25 @@ import java.io.Serializable;
  */
 
 @Entity
+@Embeddable
 @Table(name = "MEMBERS")
 public class Member implements Serializable {
 
-    private int memberId;
+    private long _memberId;
     private String memEmail;
     private String belt;
     private int attendanceThisYear;
+    @Embedded
+    private AUStudent studentDetails;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int getMemberId() {
-        return memberId;
+    public long getMemberId() {
+        return this._memberId;
     }
 
     public void setMemberId(int memberId) {
-        this.memberId = memberId;
+        this._memberId = memberId;
     }
 
     public String getMemEmail() {
