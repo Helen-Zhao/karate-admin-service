@@ -8,25 +8,22 @@ import java.io.Serializable;
  */
 
 @Entity
-@Embeddable
 @Table(name = "MEMBERS")
 public class Member implements Serializable {
 
     private long _memberId;
     private String memEmail;
-    private String belt;
+    private Belt belt;
     private int attendanceThisYear;
-    @Embedded
-    private AUStudent studentDetails;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getMemberId() {
+    public long get_memberId() {
         return this._memberId;
     }
 
-    public void setMemberId(int memberId) {
-        this._memberId = memberId;
+    public void set_memberId(long _memberId) {
+        this._memberId = _memberId;
     }
 
     public String getMemEmail() {
@@ -37,11 +34,11 @@ public class Member implements Serializable {
         this.memEmail = memEmail;
     }
 
-    public String getBelt() {
+    public Belt getBelt() {
         return belt;
     }
 
-    public void setBelt(String belt) {
+    public void setBelt(Belt belt) {
         this.belt = belt;
     }
 
@@ -53,4 +50,23 @@ public class Member implements Serializable {
         this.attendanceThisYear = attendanceThisYear;
     }
 
+    public enum Belt {
+        BLACK_FOURTH_DAN,
+        BLACK_THIRD_DAN,
+        BLACK_SECOND_DAN,
+        BLACK_FIRST_DAN,
+        BROWN_TWO_TAB,
+        BROWN_ONE_TAB,
+        BROWN,
+        GREEN_TAB,
+        GREEN,
+        YELLOW_TAB,
+        YELLOW,
+        BLUE_TAB,
+        BLUE,
+        WHITE_TAB,
+        WHITE
+    }
 }
+
+
