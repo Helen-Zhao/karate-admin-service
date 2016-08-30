@@ -16,6 +16,19 @@ public class Member implements Serializable {
     private Belt belt;
     private int attendanceThisYear;
 
+    public Member(
+            long id,
+            String email,
+            Belt belt,
+            int attendanceThisYear) {
+
+        this._memberId = id;
+        this.memEmail = email;
+        this.belt = belt;
+        this.attendanceThisYear = attendanceThisYear;
+
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long get_memberId() {
