@@ -11,10 +11,14 @@ import java.io.Serializable;
 @Table(name = "MEMBERS")
 public class Member implements Serializable {
 
-    private long _memberId;
+    private long id;
     private String memEmail;
     private Belt belt;
     private int attendanceThisYear;
+
+    protected Member() {
+
+    }
 
     public Member(
             long id,
@@ -22,7 +26,18 @@ public class Member implements Serializable {
             Belt belt,
             int attendanceThisYear) {
 
-        this._memberId = id;
+        this.id = id;
+        this.memEmail = email;
+        this.belt = belt;
+        this.attendanceThisYear = attendanceThisYear;
+
+    }
+
+    public Member(
+            String email,
+            Belt belt,
+            int attendanceThisYear) {
+
         this.memEmail = email;
         this.belt = belt;
         this.attendanceThisYear = attendanceThisYear;
@@ -31,12 +46,12 @@ public class Member implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long get_memberId() {
-        return this._memberId;
+    public long getId() {
+        return this.id;
     }
 
-    public void set_memberId(long _memberId) {
-        this._memberId = _memberId;
+    public void setId(long _memberId) {
+        this.id = _memberId;
     }
 
     public String getMemEmail() {

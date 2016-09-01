@@ -1,5 +1,8 @@
 package dto;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -22,6 +25,10 @@ public class Member {
     @XmlElement(name = "attendance")
     private int _attendanceThisYear;
 
+    public Member() {
+
+    }
+
     public Member(String email,
                   String belt,
                   int attendance) {
@@ -39,11 +46,11 @@ public class Member {
         this._attendanceThisYear = attendance;
     }
 
-    public long get_id() {
+    public long getId() {
         return _id;
     }
 
-    public void set_id(long _id) {
+    public void setId(long _id) {
         this._id = _id;
     }
 
@@ -69,6 +76,54 @@ public class Member {
 
     public void set_attendanceThisYear(int _attendanceThisYear) {
         this._attendanceThisYear = _attendanceThisYear;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("Parolee: { [");
+        buffer.append(_id);
+        buffer.append("]; ");
+        if (_email != null) {
+            buffer.append(_email);
+            buffer.append("; ");
+        }
+        if (_belt != null) {
+            buffer.append(_belt);
+        }
+        buffer.append("; ");
+        buffer.append(_attendanceThisYear);
+        buffer.append("; ");
+        buffer.append(" }");
+
+        return buffer.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Member))
+            return false;
+        if (obj == this)
+            return true;
+
+        Member rhs = (Member) obj;
+        return new EqualsBuilder().
+                append(_id, rhs._id).
+                append(_email, rhs._email).
+                append(_belt, rhs._belt).
+                append(_attendanceThisYear, rhs._attendanceThisYear).
+                isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31).
+                append(_id).
+                append(_email).
+                append(_belt).
+                append(_attendanceThisYear).
+                toHashCode();
     }
 
 

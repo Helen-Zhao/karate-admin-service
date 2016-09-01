@@ -8,7 +8,7 @@ import domain.Member;
 public class MemberMapper {
     static Member toDomainModel(dto.Member dtoMember) {
         Member fullMember = new Member(
-                dtoMember.get_id(),
+                dtoMember.getId(),
                 dtoMember.get_email(),
                 mapBeltToEnum(dtoMember.get_belt()),
                 dtoMember.get_attendanceThisYear()
@@ -19,7 +19,7 @@ public class MemberMapper {
 
     static dto.Member toDto(Member member) {
         dto.Member dtoMember = new dto.Member(
-                member.get_memberId(),
+                member.getId(),
                 member.getMemEmail(),
                 mapBeltToString(member.getBelt()),
                 member.getAttendanceThisYear()

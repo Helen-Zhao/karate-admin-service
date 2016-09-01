@@ -13,7 +13,11 @@ public class MemberApplication  extends Application {
     private Set<Class<?>> classes = new HashSet<>();
 
     public MemberApplication() {
-        //TODO
+
+        MemberResource mr = new MemberResource();
+        singletons.add(mr);
+
+        classes.add(MemberResolver.class);
     }
 
     @Override
