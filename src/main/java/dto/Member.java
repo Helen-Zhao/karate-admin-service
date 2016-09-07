@@ -16,13 +16,13 @@ public class Member {
     @XmlAttribute(name = "id")
     private long _id;
 
-    @XmlElement(name = "email")
+    @XmlElement(name = "email", required = true)
     private String _email;
 
-    @XmlElement(name = "belt")
+    @XmlElement(name = "belt", required = true)
     private String _belt;
 
-    @XmlElement(name = "attendance")
+    @XmlElement(name = "attendance", required = true)
     private int _attendanceThisYear;
 
     public Member() {

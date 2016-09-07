@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class MemberResource {
 
     @GET
     @Path("/{id}")
-    @Produces("")
+    @Produces(MediaType.APPLICATION_XML)
     public Member getMember(@PathParam("id") long id) {
         Member member = _memberDB.get(id);
         if (member == null) {
@@ -33,26 +34,26 @@ public class MemberResource {
     }
 
     @POST
-    @Consumes("application/xml")
+    @Consumes(MediaType.APPLICATION_XML)
     public Response createParolee(
             dto.Member dtoMember) {
-        _logger.debug("Read parolee: " + dtoMember);
+        System.out.println("Read parolee: " + dtoMember);
         Member member = MemberMapper.toDomainModel(dtoMember);
         member.setId(_idCounter.incrementAndGet());
         _memberDB.put(member.getId(), member);
 
-        _logger.debug("Created member: " + member);
+        System.out.println("Created member: " + member);
 
         // Return a Response that specifies a status code of 201 Created along
         // with the Location header set to URI of the newly created Parolee.
-        return Response.created(URI.create("/members/" + member.getId()))
+        return Response.created(URI.create("/members/" + member.getId())).entity(member)
                 .build();
     }
 
     @PUT
     @Path("{id}")
-    @Consumes("application/xml")
-    public void updateParolee(
+    @Consumes(MediaType.APPLICATION_XML)
+    public void updateMember(
             dto.Member dtoMember) {
         // Get the Parolee object from the database.
 
@@ -61,6 +62,7 @@ public class MemberResource {
         Member member = MemberMapper.toDomainModel(dtoMember);
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.
+        //TODO
     }
 
 }

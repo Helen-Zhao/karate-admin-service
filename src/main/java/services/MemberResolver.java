@@ -2,13 +2,19 @@ package services;
 
 import domain.Member;
 
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
+import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 /**
  * Created by helen on 1/09/2016.
  */
+
+@Provider
+@Produces(MediaType.APPLICATION_XML)
 public class MemberResolver implements ContextResolver<JAXBContext> {
 
     private JAXBContext _context;

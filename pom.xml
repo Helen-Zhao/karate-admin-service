@@ -12,6 +12,8 @@
         <servlet.container.port>10000</servlet.container.port>
     </properties>
 
+    <packaging>war</packaging>
+
     <dependencies>
         <!-- Hibernate JPA provider. -->
         <dependency>
@@ -99,6 +101,14 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webXml>webapp\WEB-INF\web.xml</webXml>
+                </configuration>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
@@ -137,9 +147,7 @@
                     <httpConnector>
                         <port>${servlet.container.port}</port>
                     </httpConnector>
-                    <webApp>
-                        <contextPath>/</contextPath>
-                    </webApp>
+                    <webAppSourceDirectory>webapp/  </webAppSourceDirectory>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <stopKey>foo</stopKey>
                     <stopPort>9999</stopPort>
