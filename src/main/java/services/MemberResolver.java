@@ -1,7 +1,5 @@
 package services;
 
-import domain.Member;
-
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
@@ -21,7 +19,7 @@ public class MemberResolver implements ContextResolver<JAXBContext> {
 
     public MemberResolver() {
         try {
-            _context = JAXBContext.newInstance(Member.class);
+            _context = JAXBContext.newInstance(dto.Member.class);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -29,7 +27,7 @@ public class MemberResolver implements ContextResolver<JAXBContext> {
 
     @Override
     public JAXBContext getContext(Class<?> type) {
-        if (type.equals(Member.class)) {
+        if (type.equals(dto.Member.class)) {
             return _context;
         } else {
             return null;

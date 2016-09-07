@@ -2,13 +2,11 @@ package services;
 
 import domain.Member;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -23,7 +21,7 @@ import static org.junit.Assert.fail;
  * Created by helen on 30/08/2016.
  */
 public class MemberWebServiceTest {
-    private static final String WEB_SERVICE_URI = "http://localhost:10000/members";
+    private static final String WEB_SERVICE_URI = "http://localhost:8000/members";
 
     private static final Logger _logger = LoggerFactory.getLogger(MemberWebServiceTest.class);
 
@@ -86,13 +84,13 @@ public class MemberWebServiceTest {
         Response response = _client.
                 target(WEB_SERVICE_URI)
                 .request()
-                .post(Entity.xml(dtoMember));
+                .post(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
 
         if (response.getStatus() != 201) {
             System.out.println("" + response.getStatus());
             System.out.println(response.getMediaType());
             System.out.println(response.getStatusInfo());
-            fail("Failed to create new Parolee");
+            fail("Failed to create new Member");
         }
 
         String location = response.getLocation().toString();

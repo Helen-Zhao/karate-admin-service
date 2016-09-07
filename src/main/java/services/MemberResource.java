@@ -25,33 +25,34 @@ public class MemberResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_XML)
-    public Member getMember(@PathParam("id") long id) {
+    public dto.Member getMember(@PathParam("id") long id) {
         Member member = _memberDB.get(id);
         if (member == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
-        return member;
+        return MemberMapper.toDto(member);
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    public Response createParolee(
+    public Response createMember(
             dto.Member dtoMember) {
-        System.out.println("Read parolee: " + dtoMember);
+        System.out.println("Read member: " + dtoMember);
         Member member = MemberMapper.toDomainModel(dtoMember);
         member.setId(_idCounter.incrementAndGet());
         _memberDB.put(member.getId(), member);
 
-        System.out.println("Created member: " + member);
+        System.out.println("Created member: " + member.toString());
 
         // Return a Response that specifies a status code of 201 Created along
         // with the Location header set to URI of the newly created Parolee.
-        return Response.created(URI.create("/members/" + member.getId())).entity(member)
-                .build();
+//        return Response.created(URI.create("/members/" + member.getId())).entity(MemberMapper.toDto(member))
+//                .build();
+        return Response.created(URI.create("members/" + member.getId())).build();
     }
 
     @PUT
-    @Path("{id}")
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_XML)
     public void updateMember(
             dto.Member dtoMember) {

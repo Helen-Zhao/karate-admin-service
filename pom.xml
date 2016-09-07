@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <!-- Specify the servlet container port to listen on for incoming requests. -->
     <properties>
-        <servlet.container.port>10000</servlet.container.port>
+        <servlet.container.port>8000</servlet.container.port>
     </properties>
 
     <packaging>war</packaging>
