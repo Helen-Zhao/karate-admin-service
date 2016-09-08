@@ -3,9 +3,10 @@
              version="2.0">
 
     <persistence-unit name="MemberPU">
+        <class>domain.Member</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="org.h2.jdbc:h2:~/test;mv_store=false"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/hello;mv_store=false;INIT=create schema if not exists hello\;runscript from '~/sql/init.sql'"/>
             <property name="javax.persistence.jdbc.user" value="admin"/>
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>

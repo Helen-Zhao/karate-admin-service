@@ -82,7 +82,7 @@ public class Member {
     public String toString() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("Parolee: { [");
+        buffer.append("Member: { [");
         buffer.append(_id);
         buffer.append("]; ");
         if (_email != null) {
