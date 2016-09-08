@@ -74,7 +74,7 @@ public class MemberWebServiceTest {
     @Test
     public void addMember() {
         Member member = new Member(
-                "helloworld@example.com",
+                "lalal@example.com",
                 Member.Belt.BLACK_FIRST_DAN,
                 100
         );
@@ -87,9 +87,6 @@ public class MemberWebServiceTest {
                 .post(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
 
         if (response.getStatus() != 201) {
-            System.out.println("" + response.getStatus());
-            System.out.println(response.getMediaType());
-            System.out.println(response.getStatusInfo());
             fail("Failed to create new Member");
         }
 
@@ -107,5 +104,69 @@ public class MemberWebServiceTest {
         assertEquals(member.getBelt(), memberFromService.getBelt());
         assertEquals(member.getMemEmail(), memberFromService.getMemEmail());
     }
+
+    @Test
+    public void updateMember() {
+        Member member = new Member(
+                "booooo@example.com",
+                Member.Belt.YELLOW,
+                25
+        );
+
+        dto.Member dtoMember = MemberMapper.toDto(member);
+
+        Response response = _client.
+                target(WEB_SERVICE_URI)
+                .request()
+                .post(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
+
+        if (response.getStatus() != 201) {
+            fail("Failed to create new Member");
+        }
+
+        String location = response.getLocation().toString();
+        response.close();
+
+        dto.Member dtoMemberFromService = _client.target(location)
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(dto.Member.class);
+
+        Member memberFromService = MemberMapper.toDomainModel(dtoMemberFromService);
+
+        /**
+         * Updating
+         *
+         */
+
+        memberFromService.setBelt(Member.Belt.YELLOW_TAB);
+        memberFromService.setAttendanceThisYear(memberFromService.getAttendanceThisYear() + 1);
+
+        dtoMember = MemberMapper.toDto(memberFromService);
+        Response response1 = _client.
+                target(WEB_SERVICE_URI + "/" + dtoMember.getId())
+                .request()
+                .put(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
+
+        if (response.getStatus() != 201) {
+            fail("Failed to create new Member");
+        }
+
+        location = response.getLocation().toString();
+        response.close();
+
+        dto.Member updatedDtoMemberFromService = _client.target(location)
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(dto.Member.class);
+
+        Member updatedMemberFromService = MemberMapper.toDomainModel(updatedDtoMemberFromService);
+
+
+        assertEquals(memberFromService.getAttendanceThisYear(), updatedMemberFromService.getAttendanceThisYear());
+        assertEquals(memberFromService.getBelt(), updatedMemberFromService.getBelt());
+        assertEquals(memberFromService.getMemEmail(), updatedMemberFromService.getMemEmail());
+    }
+
 
 }

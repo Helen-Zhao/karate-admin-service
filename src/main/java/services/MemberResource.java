@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,6 +20,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Path("/members")
 public class MemberResource {
+    @PersistenceContext
+    EntityManager em = PersistenceManager.instance().createEntityManager();
+
     private static final Logger _logger = LoggerFactory.getLogger(MemberResource.class);
     private Map<Long, Member> _memberDB = new ConcurrentHashMap<Long, Member>();
     private AtomicInteger _idCounter = new AtomicInteger();
@@ -27,8 +31,14 @@ public class MemberResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_XML)
     public dto.Member getMember(@PathParam("id") long id) {
-        EntityManager em = PersistenceManager.instance().createEntityManager();
-        Member member = em.find(Member.class, id);
+        Member member;
+        if (_memberDB.containsKey(id)) {
+            member = _memberDB.get(id);
+        } else {
+            member = em.find(Member.class, id);
+            _memberDB.put(member.getId(), member);
+        }
+
         if (member == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -42,12 +52,9 @@ public class MemberResource {
         System.out.println("Read member: " + dtoMember);
         Member member = MemberMapper.toDomainModel(dtoMember);
 
-
-        EntityManager em = PersistenceManager.instance().createEntityManager();
         em.getTransaction().begin();
         em.persist(member);
         em.getTransaction().commit();
-        em.close();
 
         System.out.println("ID IS " + member.getId());
         System.out.println("Created member: " + member.toString());
@@ -62,16 +69,20 @@ public class MemberResource {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_XML)
-    public void updateMember(
+    public Response updateMember(
             dto.Member dtoMember) {
         // Get the Parolee object from the database.
 
         // Update the Parolee object in the database based on the data in
         // dtoMember.
         Member member = MemberMapper.toDomainModel(dtoMember);
+        em.merge(member);
+
+        return Response.ok(URI.create("members/" + member.getId())).build();
+
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.
-        //TODO
+
     }
 
 }

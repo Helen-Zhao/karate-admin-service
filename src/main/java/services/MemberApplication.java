@@ -1,5 +1,9 @@
 package services;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,6 +13,8 @@ import java.util.Set;
  */
 public class MemberApplication  extends Application {
 
+    @PersistenceUnit
+    EntityManagerFactory emf;
     private Set<Object> singletons = new HashSet<>();
     private Set<Class<?>> classes = new HashSet<>();
 
