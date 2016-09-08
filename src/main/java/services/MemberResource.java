@@ -4,6 +4,7 @@ import domain.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,7 +27,8 @@ public class MemberResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_XML)
     public dto.Member getMember(@PathParam("id") long id) {
-        Member member = _memberDB.get(id);
+        EntityManager em = PersistenceManager.instance().createEntityManager();
+        Member member = em.find(Member.class, id);
         if (member == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
@@ -39,9 +41,15 @@ public class MemberResource {
             dto.Member dtoMember) {
         System.out.println("Read member: " + dtoMember);
         Member member = MemberMapper.toDomainModel(dtoMember);
-        member.setId(_idCounter.incrementAndGet());
-        _memberDB.put(member.getId(), member);
 
+
+        EntityManager em = PersistenceManager.instance().createEntityManager();
+        em.getTransaction().begin();
+        em.persist(member);
+        em.getTransaction().commit();
+        em.close();
+
+        System.out.println("ID IS " + member.getId());
         System.out.println("Created member: " + member.toString());
 
         // Return a Response that specifies a status code of 201 Created along

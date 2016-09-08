@@ -103,7 +103,6 @@ public class MemberWebServiceTest {
 
         Member memberFromService = MemberMapper.toDomainModel(dtoMemberFromService);
 
-
         assertEquals(member.getAttendanceThisYear(), memberFromService.getAttendanceThisYear());
         assertEquals(member.getBelt(), memberFromService.getBelt());
         assertEquals(member.getMemEmail(), memberFromService.getMemEmail());

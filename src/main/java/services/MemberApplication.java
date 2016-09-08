@@ -16,6 +16,7 @@ public class MemberApplication  extends Application {
 
         MemberResource mr = new MemberResource();
         singletons.add(mr);
+        singletons.add(PersistenceManager.instance());
 
         classes.add(MemberResolver.class);
     }
