@@ -1,8 +1,6 @@
 package services;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
@@ -21,10 +19,13 @@ public class MemberApplication  extends Application {
     public MemberApplication() {
 
         MemberResource mr = new MemberResource();
+        AUStudentResource asr = new AUStudentResource();
         singletons.add(mr);
+        singletons.add(asr);
         singletons.add(PersistenceManager.instance());
 
         classes.add(MemberResolver.class);
+        classes.add(AUStudentResolver.class);
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "MEMBERS")
+@Inheritance(strategy = InheritanceType.JOINED)
 
 public class Member implements Serializable {
 
