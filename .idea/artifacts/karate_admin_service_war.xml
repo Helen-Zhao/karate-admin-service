@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="karate-admin-service:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="karate-admin-service-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="karate-admin-service:war exploded" />
+    </root>
+  </artifact>
+</component>

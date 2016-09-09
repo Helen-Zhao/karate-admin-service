@@ -6,26 +6,27 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Created by helen on 29/08/2016.
  */
-
 @Path("/members")
 public class MemberResource {
     @PersistenceContext
     EntityManager em = PersistenceManager.instance().createEntityManager();
 
+
     private static final Logger _logger = LoggerFactory.getLogger(MemberResource.class);
     private Map<Long, Member> _memberDB = new ConcurrentHashMap<Long, Member>();
-    private AtomicInteger _idCounter = new AtomicInteger();
 
     @GET
     @Path("/{id}")
@@ -45,6 +46,17 @@ public class MemberResource {
         return MemberMapper.toDto(member);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    public List<dto.Member> getMembers() {
+        Query query = em.createQuery("SELECT m from Member m");
+        List<Member> members = query.getResultList();
+        List<dto.Member> dtoMembers = members.stream()
+                .map(e -> MemberMapper.toDto(e))
+                .collect(Collectors.toList());
+        return dtoMembers;
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public Response createMember(
@@ -56,13 +68,7 @@ public class MemberResource {
         em.persist(member);
         em.getTransaction().commit();
 
-        System.out.println("ID IS " + member.getId());
-        System.out.println("Created member: " + member.toString());
 
-        // Return a Response that specifies a status code of 201 Created along
-        // with the Location header set to URI of the newly created Parolee.
-//        return Response.created(URI.create("/members/" + member.getId())).entity(MemberMapper.toDto(member))
-//                .build();
         return Response.created(URI.create("members/" + member.getId())).build();
     }
 
@@ -78,7 +84,7 @@ public class MemberResource {
         Member member = MemberMapper.toDomainModel(dtoMember);
         em.merge(member);
 
-        return Response.ok(URI.create("members/" + member.getId())).build();
+        return Response.noContent().build();
 
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.

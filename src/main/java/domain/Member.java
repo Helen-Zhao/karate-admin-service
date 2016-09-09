@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "MEMBERS")
+
 public class Member implements Serializable {
 
     private long id;
@@ -62,6 +63,7 @@ public class Member implements Serializable {
         this.memEmail = memEmail;
     }
 
+    @Enumerated(EnumType.STRING)
     public Belt getBelt() {
         return belt;
     }
