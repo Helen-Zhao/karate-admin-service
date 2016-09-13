@@ -1,7 +1,7 @@
 package services;
 
 import domain.AUStudent;
-import domain.Member;
+import domain.Belt;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +13,9 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -52,8 +55,9 @@ public class AUStudentWebServiceTest {
     public void addStudent() {
         AUStudent student = new AUStudent(
                 "student@aucklanduni.ac.nz",
-                Member.Belt.GREEN,
+                Belt.GREEN,
                 223,
+                new ArrayList<Date>(),
                 12345,
                 "abcd123",
                 false
@@ -80,7 +84,7 @@ public class AUStudentWebServiceTest {
 
         AUStudent studentFromService = AUStudentMapper.toDomainModel(dtoAUStudentFromService);
 
-        assertEquals(student.getAttendanceThisYear(), studentFromService.getAttendanceThisYear());
+        assertEquals(student.getAttendanceCount(), studentFromService.getAttendanceCount());
         assertEquals(student.getBelt(), studentFromService.getBelt());
         assertEquals(student.getMemEmail(), studentFromService.getMemEmail());
         assertEquals(student.getAuid(), studentFromService.getAuid());
@@ -92,7 +96,7 @@ public class AUStudentWebServiceTest {
 //    public void updateMember() {
 //        Member member = new Member(
 //                "booooo@example.com",
-//                Member.Belt.YELLOW,
+//                Belt.YELLOW,
 //                25
 //        );
 //
@@ -122,7 +126,7 @@ public class AUStudentWebServiceTest {
 //         *
 //         */
 //
-//        memberFromService.setBelt(Member.Belt.YELLOW_TAB);
+//        memberFromService.setBelt(Belt.YELLOW_TAB);
 //        memberFromService.setAttendanceThisYear(memberFromService.getAttendanceThisYear() + 1);
 //
 //        dtoMember = MemberMapper.toDto(memberFromService);

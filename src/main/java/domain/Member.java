@@ -2,6 +2,8 @@ package domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by helen on 29/08/2016.
@@ -13,10 +15,17 @@ import java.io.Serializable;
 
 public class Member implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String memEmail;
+    
+    @Enumerated(EnumType.STRING)
     private Belt belt;
-    private int attendanceThisYear;
+    private int attendanceCount;
+
+    @ElementCollection
+    List<Date> attendance;
 
     protected Member() {
 
@@ -26,28 +35,39 @@ public class Member implements Serializable {
             long id,
             String email,
             Belt belt,
-            int attendanceThisYear) {
+            int attendanceCount,
+            List<Date> attendance) {
 
         this.id = id;
         this.memEmail = email;
         this.belt = belt;
-        this.attendanceThisYear = attendanceThisYear;
+        this.attendanceCount = attendanceCount;
+        this.attendance = attendance;
 
     }
 
     public Member(
             String email,
             Belt belt,
-            int attendanceThisYear) {
+            int attendanceCount,
+            List<Date> attendance) {
 
         this.memEmail = email;
         this.belt = belt;
-        this.attendanceThisYear = attendanceThisYear;
+        this.attendanceCount = attendanceCount;
+        this.attendance = attendance;
 
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    public List<Date> getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(List<Date> attendance) {
+        this.attendance = attendance;
+    }
+
     public long getId() {
         return this.id;
     }
@@ -64,7 +84,6 @@ public class Member implements Serializable {
         this.memEmail = memEmail;
     }
 
-    @Enumerated(EnumType.STRING)
     public Belt getBelt() {
         return belt;
     }
@@ -73,31 +92,14 @@ public class Member implements Serializable {
         this.belt = belt;
     }
 
-    public int getAttendanceThisYear() {
-        return attendanceThisYear;
+    public int getAttendanceCount() {
+        return attendanceCount;
     }
 
-    public void setAttendanceThisYear(int attendanceThisYear) {
-        this.attendanceThisYear = attendanceThisYear;
+    public void setAttendanceCount(int attendanceThisYear) {
+        this.attendanceCount = attendanceThisYear;
     }
 
-    public enum Belt {
-        BLACK_FOURTH_DAN,
-        BLACK_THIRD_DAN,
-        BLACK_SECOND_DAN,
-        BLACK_FIRST_DAN,
-        BROWN_TWO_TAB,
-        BROWN_ONE_TAB,
-        BROWN,
-        GREEN_TAB,
-        GREEN,
-        YELLOW_TAB,
-        YELLOW,
-        BLUE_TAB,
-        BLUE,
-        WHITE_TAB,
-        WHITE
-    }
 }
 
 

@@ -3,6 +3,8 @@ package domain;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by helen on 29/08/2016.
@@ -16,20 +18,25 @@ public class AUStudent extends Member implements Serializable {
     private String upi;
     private boolean paidAnnualFee;
 
-    public AUStudent(String email, Belt belt, int attendance, int auid, String upi, boolean paidAnnualFee) {
+    public AUStudent() {}
+
+
+    public AUStudent(String email, Belt belt, int attendanceCount, List<Date> attendance, int auid, String upi, boolean paidAnnualFee) {
         this.setMemEmail(email);
         this.setBelt(belt);
-        this.setAttendanceThisYear(attendance);
+        this.setAttendanceCount(attendanceCount);
+        this.setAttendance(attendance);
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;
     }
 
-    public AUStudent(long id, String email, Belt belt, int attendance, int auid, String upi, boolean paidAnnualFee) {
+    public AUStudent(long id, String email, Belt belt, int attendanceCount, List<Date> attendance, int auid, String upi, boolean paidAnnualFee) {
         this.setId(id);
         this.setMemEmail(email);
         this.setBelt(belt);
-        this.setAttendanceThisYear(attendance);
+        this.setAttendanceCount(attendanceCount);
+        this.setAttendance(attendance);
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;
