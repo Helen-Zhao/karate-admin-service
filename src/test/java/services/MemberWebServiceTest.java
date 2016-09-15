@@ -1,7 +1,9 @@
 package services;
 
 import domain.Belt;
+import domain.Fees;
 import domain.Member;
+import domain.Session;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,9 +58,7 @@ public class MemberWebServiceTest {
     public void addMember() {
         Member member = new Member(
                 "lalal@example.com",
-                Belt.BLACK_FIRST_DAN,
-                100,
-                new ArrayList<Date>()
+                Belt.BLACK_FIRST_DAN
         );
 
         dto.Member dtoMember = MemberMapper.toDto(member);
@@ -82,18 +82,15 @@ public class MemberWebServiceTest {
 
         Member memberFromService = MemberMapper.toDomainModel(dtoMemberFromService);
 
-        assertEquals(member.getAttendanceCount(), memberFromService.getAttendanceCount());
         assertEquals(member.getBelt(), memberFromService.getBelt());
-        assertEquals(member.getMemEmail(), memberFromService.getMemEmail());
+        assertEquals(member.getEmail(), memberFromService.getEmail());
     }
 
     @Test
     public void updateMember() {
         Member member = new Member(
                 "booooo@example.com",
-                Belt.YELLOW,
-                25,
-                new ArrayList<Date>()
+                Belt.YELLOW
         );
 
         dto.Member dtoMember = MemberMapper.toDto(member);
@@ -123,8 +120,7 @@ public class MemberWebServiceTest {
          */
 
         memberFromService.setBelt(Belt.YELLOW_TAB);
-        memberFromService.setAttendanceCount(memberFromService.getAttendanceCount() + 1);
-        memberFromService.getAttendance().add(new Date());
+        memberFromService.getAttendedSessions().add(new Session(new Date()));
 
         dtoMember = MemberMapper.toDto(memberFromService);
         Response response1 = _client.
@@ -147,10 +143,8 @@ public class MemberWebServiceTest {
 
         Member updatedMemberFromService = MemberMapper.toDomainModel(updatedDtoMemberFromService);
 
-
-        assertEquals(memberFromService.getAttendanceCount(), updatedMemberFromService.getAttendanceCount());
         assertEquals(memberFromService.getBelt(), updatedMemberFromService.getBelt());
-        assertEquals(memberFromService.getMemEmail(), updatedMemberFromService.getMemEmail());
+        assertEquals(memberFromService.getEmail(), updatedMemberFromService.getEmail());
     }
 
     @Test

@@ -2,7 +2,7 @@ package domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,15 +17,18 @@ public class Member implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String memEmail;
-    
-    @Enumerated(EnumType.STRING)
-    private Belt belt;
-    private int attendanceCount;
+    protected long id;
+    protected String email;
 
-    @ElementCollection
-    List<Date> attendance;
+    @Enumerated(EnumType.STRING)
+    protected Belt belt;
+
+    @ManyToMany
+    protected List<Session> attendedSessions;
+
+
+    @Embedded
+    protected Fees fees;
 
     protected Member() {
 
@@ -35,37 +38,54 @@ public class Member implements Serializable {
             long id,
             String email,
             Belt belt,
-            int attendanceCount,
-            List<Date> attendance) {
+            List<Session> attendedSessions,
+            Fees fees) {
 
         this.id = id;
-        this.memEmail = email;
+        this.email = email;
         this.belt = belt;
-        this.attendanceCount = attendanceCount;
-        this.attendance = attendance;
+        this.attendedSessions = attendedSessions;
+        this.fees = fees;
 
     }
 
     public Member(
             String email,
             Belt belt,
-            int attendanceCount,
-            List<Date> attendance) {
+            List<Session> attendedSessions,
+            Fees fees) {
 
-        this.memEmail = email;
+        this.email = email;
         this.belt = belt;
-        this.attendanceCount = attendanceCount;
-        this.attendance = attendance;
+        this.attendedSessions = attendedSessions;
+        this.fees = fees;
 
     }
 
-
-    public List<Date> getAttendance() {
-        return attendance;
+    public Member(
+            String email,
+            Belt belt
+    ) {
+        this.email = email;
+        this.belt = belt;
+        this.attendedSessions = new ArrayList<>();
+        this.fees = new Fees();
     }
 
-    public void setAttendance(List<Date> attendance) {
-        this.attendance = attendance;
+    public Fees getFees() {
+        return fees;
+    }
+
+    public void setFees(Fees fees) {
+        this.fees = fees;
+    }
+
+    public List<Session> getAttendedSessions() {
+        return attendedSessions;
+    }
+
+    public void setAttendedSessions(List<Session> attendedSessions) {
+        this.attendedSessions = attendedSessions;
     }
 
     public long getId() {
@@ -76,12 +96,12 @@ public class Member implements Serializable {
         this.id = _memberId;
     }
 
-    public String getMemEmail() {
-        return memEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMemEmail(String memEmail) {
-        this.memEmail = memEmail;
+    public void setEmail(String memEmail) {
+        this.email = memEmail;
     }
 
     public Belt getBelt() {
@@ -90,14 +110,6 @@ public class Member implements Serializable {
 
     public void setBelt(Belt belt) {
         this.belt = belt;
-    }
-
-    public int getAttendanceCount() {
-        return attendanceCount;
-    }
-
-    public void setAttendanceCount(int attendanceThisYear) {
-        this.attendanceCount = attendanceThisYear;
     }
 
 }

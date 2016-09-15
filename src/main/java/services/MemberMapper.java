@@ -10,10 +10,10 @@ public class MemberMapper {
     static Member toDomainModel(dto.Member dtoMember) {
         Member fullMember = new Member(
                 dtoMember.getId(),
-                dtoMember.get_email(),
-                mapBeltToEnum(dtoMember.get_belt()),
-                dtoMember.get_attendanceThisYear(),
-                dtoMember.getAttendance()
+                dtoMember.getEmail(),
+                mapBeltToEnum(dtoMember.getBelt()),
+                dtoMember.getAttendedSessions(),
+                dtoMember.getFees()
         );
 
         return fullMember;
@@ -22,10 +22,10 @@ public class MemberMapper {
     static dto.Member toDto(Member member) {
         dto.Member dtoMember = new dto.Member(
                 member.getId(),
-                member.getMemEmail(),
+                member.getEmail(),
                 mapBeltToString(member.getBelt()),
-                member.getAttendanceCount(),
-                member.getAttendance()
+                member.getAttendedSessions(),
+                member.getFees()
         );
 
         return dtoMember;

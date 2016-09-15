@@ -1,10 +1,11 @@
 package dto;
 
+import domain.Fees;
+import domain.Session;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.xml.bind.annotation.*;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,13 +17,14 @@ import java.util.List;
 public class AUStudent extends Member{
 
     @XmlElement(name = "auid", required = true)
-    private int _auid;
+    private int auid;
 
     @XmlElement(name = "upi", required = true)
-    private String _upi;
+    private String upi;
 
     @XmlElement(name = "paidAnnualFee", required = true)
-    private boolean _paidAnnualFee;
+    private boolean paidAnnualFee;
+
 
     public AUStudent() {
 
@@ -30,60 +32,59 @@ public class AUStudent extends Member{
 
     public AUStudent(String email,
                      String belt,
-                     int attendanceCount,
-                     List<Date> attendance,
+                     List<Session> attendedSessions,
+                     Fees fees,
                      int auid,
                      String upi,
                      boolean paidAnnualFee) {
-        this.set_email(email);
-        this.set_belt(belt);
-        this.set_attendanceThisYear(attendanceCount);
-        this.setAttendance(attendance);
-        this._auid = auid;
-        this._upi = upi;
-        this._paidAnnualFee = paidAnnualFee;
+        this.email = email;
+        this.belt = belt;
+        this.attendedSessions = attendedSessions;
+        this.auid = auid;
+        this.upi = upi;
+        this.paidAnnualFee = paidAnnualFee;
     }
 
     public AUStudent(long id,
                      String email,
                      String belt,
-                     int attendanceCount,
-                     List<Date> attendance,
+                     List<Session> attendedSessions,
+                     Fees fees,
                      int auid,
                      String upi,
                      boolean paidAnnualFee) {
-        this.setId(id);
-        this.set_email(email);
-        this.set_belt(belt);
-        this.set_attendanceThisYear(attendanceCount);
-        this.setAttendance(attendance);
-        this._auid = auid;
-        this._upi = upi;
-        this._paidAnnualFee = paidAnnualFee;
+
+        this.id = id;
+        this.email = email;
+        this.belt = belt;
+        this.attendedSessions = attendedSessions;
+        this.auid = auid;
+        this.upi = upi;
+        this.paidAnnualFee = paidAnnualFee;
     }
 
-    public int get_auid() {
-        return _auid;
+    public int getAuid() {
+        return auid;
     }
 
-    public void set_auid(int _auid) {
-        this._auid = _auid;
+    public void setAuid(int auid) {
+        this.auid = auid;
     }
 
-    public String get_upi() {
-        return _upi;
+    public String getUpi() {
+        return upi;
     }
 
-    public void set_upi(String _upi) {
-        this._upi = _upi;
+    public void setUpi(String upi) {
+        this.upi = upi;
     }
 
-    public boolean get_paidAnnualFee() {
-        return _paidAnnualFee;
+    public boolean getPaidAnnualFee() {
+        return paidAnnualFee;
     }
 
-    public void set_paidAnnualFee(boolean _paidAnnualFee) {
-        this._paidAnnualFee = _paidAnnualFee;
+    public void setPaidAnnualFee(boolean paidAnnualFee) {
+        this.paidAnnualFee = paidAnnualFee;
     }
 
     @Override
@@ -91,25 +92,23 @@ public class AUStudent extends Member{
         StringBuffer buffer = new StringBuffer();
 
         buffer.append("Member: { [");
-        buffer.append(this.getId());
+        buffer.append(id);
         buffer.append("]; ");
-        if (this.get_email() != null) {
-            buffer.append(this.get_email());
+        if (this.email != null) {
+            buffer.append(email);
             buffer.append("; ");
         }
-        if (this.get_belt() != null) {
-            buffer.append(this.get_belt());
+        if (this.belt != null) {
+            buffer.append(belt);
         }
         buffer.append("; ");
-        buffer.append(this.get_attendanceThisYear());
+        buffer.append(attendedSessions);
         buffer.append("; ");
-        buffer.append(this.getAttendance());
+        buffer.append(auid);
         buffer.append("; ");
-        buffer.append(_auid);
+        buffer.append(upi);
         buffer.append("; ");
-        buffer.append(_upi);
-        buffer.append("; ");
-        buffer.append(_paidAnnualFee);
+        buffer.append(paidAnnualFee);
         buffer.append("; ");
         buffer.append(" }");
 
@@ -125,28 +124,26 @@ public class AUStudent extends Member{
 
         AUStudent rhs = (AUStudent) obj;
         return new EqualsBuilder().
-                append(this.getId(), rhs.getId()).
-                append(this.get_email(), rhs.get_email()).
-                append(this.get_belt(), rhs.get_belt()).
-                append(this.get_attendanceThisYear(), rhs.get_attendanceThisYear()).
-                append(this.getAttendance(), rhs.getAttendance()).
-                append(_auid, rhs._auid).
-                append(_upi, rhs._upi).
-                append(_paidAnnualFee, rhs._paidAnnualFee).
+                append(this.id, rhs.id).
+                append(this.email, rhs.email).
+                append(this.belt, rhs.belt).
+                append(this.attendedSessions, rhs.attendedSessions).
+                append(auid, rhs.auid).
+                append(upi, rhs.upi).
+                append(paidAnnualFee, rhs.paidAnnualFee).
                 isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31).
-                append(this.getId()).
-                append(this.get_email()).
-                append(this.get_belt()).
-                append(this.get_attendanceThisYear()).
-                append(this.getAttendance()).
-                append(_auid).
-                append(_upi).
-                append(_paidAnnualFee).
+                append(this.id).
+                append(this.email).
+                append(this.belt).
+                append(this.attendedSessions).
+                append(auid).
+                append(upi).
+                append(paidAnnualFee).
                 toHashCode();
     }
 

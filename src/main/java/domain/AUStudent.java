@@ -3,6 +3,7 @@ package domain;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Date;
 import java.util.List;
 
@@ -21,22 +22,21 @@ public class AUStudent extends Member implements Serializable {
     public AUStudent() {}
 
 
-    public AUStudent(String email, Belt belt, int attendanceCount, List<Date> attendance, int auid, String upi, boolean paidAnnualFee) {
-        this.setMemEmail(email);
-        this.setBelt(belt);
-        this.setAttendanceCount(attendanceCount);
-        this.setAttendance(attendance);
+    public AUStudent(String email, Belt belt, List<Session> attendedSessions, Fees fees, int auid, String upi, boolean paidAnnualFee) {
+        this.email = email;
+        this.belt = belt;
+        this.attendedSessions = attendedSessions;
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;
     }
 
-    public AUStudent(long id, String email, Belt belt, int attendanceCount, List<Date> attendance, int auid, String upi, boolean paidAnnualFee) {
+    public AUStudent(long id, String email, Belt belt, List<Session> attendedSessions, Fees fees, int auid, String upi, boolean paidAnnualFee) {
         this.setId(id);
-        this.setMemEmail(email);
-        this.setBelt(belt);
-        this.setAttendanceCount(attendanceCount);
-        this.setAttendance(attendance);
+        this.email = email;
+        this.belt = belt;
+        this.attendedSessions = attendedSessions;
+        this.fees = fees;
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;

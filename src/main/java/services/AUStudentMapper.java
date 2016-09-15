@@ -10,13 +10,13 @@ public class AUStudentMapper {
     static AUStudent toDomainModel(dto.AUStudent dtoAUStudent) {
         AUStudent fullStudent = new AUStudent (
                 dtoAUStudent.getId(),
-                dtoAUStudent.get_email(),
-                mapBeltToEnum(dtoAUStudent.get_belt()),
-                dtoAUStudent.get_attendanceThisYear(),
-                dtoAUStudent.getAttendance(),
-                dtoAUStudent.get_auid(),
-                dtoAUStudent.get_upi(),
-                dtoAUStudent.get_paidAnnualFee()
+                dtoAUStudent.getEmail(),
+                mapBeltToEnum(dtoAUStudent.getBelt()),
+                dtoAUStudent.getAttendedSessions(),
+                dtoAUStudent.getFees(),
+                dtoAUStudent.getAuid(),
+                dtoAUStudent.getUpi(),
+                dtoAUStudent.getPaidAnnualFee()
         );
 
         return fullStudent;
@@ -25,10 +25,10 @@ public class AUStudentMapper {
     static dto.AUStudent toDto(AUStudent auStudent) {
         dto.AUStudent dtoAUStudent = new dto.AUStudent(
                 auStudent.getId(),
-                auStudent.getMemEmail(),
+                auStudent.getEmail(),
                 mapBeltToString(auStudent.getBelt()),
-                auStudent.getAttendanceCount(),
-                auStudent.getAttendance(),
+                auStudent.getAttendedSessions(),
+                auStudent.getFees(),
                 auStudent.getAuid(),
                 auStudent.getUpi(),
                 auStudent.isPaidAnnualFee()

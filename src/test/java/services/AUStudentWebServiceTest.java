@@ -2,6 +2,8 @@ package services;
 
 import domain.AUStudent;
 import domain.Belt;
+import domain.Fees;
+import domain.Session;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,11 +55,12 @@ public class AUStudentWebServiceTest {
 
     @Test
     public void addStudent() {
+
         AUStudent student = new AUStudent(
                 "student@aucklanduni.ac.nz",
                 Belt.GREEN,
-                223,
-                new ArrayList<Date>(),
+                new ArrayList<>(),
+                new Fees(),
                 12345,
                 "abcd123",
                 false
@@ -84,9 +87,8 @@ public class AUStudentWebServiceTest {
 
         AUStudent studentFromService = AUStudentMapper.toDomainModel(dtoAUStudentFromService);
 
-        assertEquals(student.getAttendanceCount(), studentFromService.getAttendanceCount());
         assertEquals(student.getBelt(), studentFromService.getBelt());
-        assertEquals(student.getMemEmail(), studentFromService.getMemEmail());
+        assertEquals(student.getEmail(), studentFromService.getEmail());
         assertEquals(student.getAuid(), studentFromService.getAuid());
         assertEquals(student.getUpi(), studentFromService.getUpi());
         assertEquals(student.isPaidAnnualFee(), studentFromService.isPaidAnnualFee());
