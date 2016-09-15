@@ -131,7 +131,6 @@ public class MemberWebServiceTest {
         response.close();
 
 
-
         dto.Member updatedDtoMemberFromService = _client.target(WEB_SERVICE_URI + "/" + memberFromService.getId())
                 .request()
                 .accept(MediaType.APPLICATION_XML)

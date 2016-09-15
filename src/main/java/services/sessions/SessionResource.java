@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.text.ParseException;
@@ -30,15 +31,25 @@ public class SessionResource {
     @GET
     @Path("/{date}")
     @Produces(MediaType.APPLICATION_XML)
-    public Session getMember(@PathParam("date") String strDate) {
-        Session session;
+    public Session getMember(@PathParam("date") String strDate, @CookieParam("cache")
+            NewCookie cookie) {
+
+        //Determine if date param is valid
         Date date;
         try {
             date = sdf.parse(strDate);
         } catch (ParseException e) {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
-            if (sessionDB.containsKey(date)) {
+
+        boolean ignoreCache = false;
+        if (cookie != null) {
+            ignoreCache = cookie.getValue().equals("ignore-cache") ? true : false;
+        }
+
+        Session session;
+        //Determine if session exists in cache
+        if (sessionDB.containsKey(date) && !ignoreCache) {
             session = sessionDB.get(date);
         } else {
             session = em.find(Session.class, date);
@@ -62,5 +73,27 @@ public class SessionResource {
 
 
         return Response.created(URI.create("sessions/" + sdf.format(session.getDate()))).build();
+    }
+
+    @PUT
+    @Path("/{date}")
+    @Consumes(MediaType.APPLICATION_XML)
+    public Response updateSession(
+            String strDate) {
+        Date date;
+        try {
+            _logger.info(strDate);
+            date = sdf.parse(strDate);
+        } catch (ParseException e) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        em.merge(date);
+
+        return Response.noContent().build();
+
+        // JAX-RS will add the default response code (204 No Content) to the
+        // HTTP response message.
+
     }
 }

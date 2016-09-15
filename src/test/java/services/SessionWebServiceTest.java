@@ -13,7 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import java.text.SimpleDateFormat;
@@ -88,7 +91,7 @@ public class SessionWebServiceTest {
     public void testGetSessionCascadeStudent() {
 
         Date today = DateUtils.round(new Date(), Calendar.DAY_OF_MONTH);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
         Session session = _client.
                 target(WEB_SERVICE_URI + "/" + sdf.format(today))
                 .request()
@@ -105,6 +108,24 @@ public class SessionWebServiceTest {
         ));
 
         //update session
+        Response response = _client
+                .target(WEB_SERVICE_URI + "/" + sdf.format(today))
+                .request()
+                .put(Entity.entity(session, MediaType.APPLICATION_XML));
+
+        if  (response.getStatus() != 204) {
+            fail("Failed to update session");
+        }
+
+        Session updatedSession = _client.
+                target(WEB_SERVICE_URI + "/" + sdf.format(today))
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .cookie(new NewCookie("cache", "ignore-cache"))
+                .get(Session.class);
+
+        assertEquals(session.getDate(), updatedSession.getDate());
+        assertEquals(session.getAttendees().get(0).getId(), updatedSession.getAttendees().get(0).getId());
     }
 
 
