@@ -1,12 +1,12 @@
 package domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import org.apache.commons.lang3.time.DateUtils;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -14,15 +14,21 @@ import java.util.List;
  */
 
 @Entity
+@XmlRootElement
+@XmlType(name = "session")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Session implements Serializable{
+
     @Id
+    @XmlAttribute
     private Date date;
 
-    @ManyToMany
+    @XmlElement
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Member> attendees;
 
     public Session() {
-        this.date = new Date();
+        this.date = DateUtils.round(new Date(), Calendar.DAY_OF_MONTH);
         this.attendees = new ArrayList<>();
     }
 
@@ -52,5 +58,22 @@ public class Session implements Serializable{
         this.attendees = attendees;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Session)) return false;
 
+        Session session = (Session) o;
+
+        if (!date.equals(session.date)) return false;
+        return attendees.equals(session.attendees);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = date.hashCode();
+        result = 31 * result + attendees.hashCode();
+        return result;
+    }
 }

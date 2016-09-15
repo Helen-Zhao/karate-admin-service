@@ -1,14 +1,13 @@
 package services;
 
 import domain.Belt;
-import domain.Fees;
 import domain.Member;
-import domain.Session;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.members.MemberMapper;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -16,8 +15,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -120,7 +117,6 @@ public class MemberWebServiceTest {
          */
 
         memberFromService.setBelt(Belt.YELLOW_TAB);
-        memberFromService.getAttendedSessions().add(new Session(new Date()));
 
         dtoMember = MemberMapper.toDto(memberFromService);
         Response response1 = _client.

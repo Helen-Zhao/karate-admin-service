@@ -3,21 +3,18 @@ package services;
 import domain.AUStudent;
 import domain.Belt;
 import domain.Fees;
-import domain.Session;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.members.AUStudentMapper;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -59,7 +56,6 @@ public class AUStudentWebServiceTest {
         AUStudent student = new AUStudent(
                 "student@aucklanduni.ac.nz",
                 Belt.GREEN,
-                new ArrayList<>(),
                 new Fees(),
                 12345,
                 "abcd123",

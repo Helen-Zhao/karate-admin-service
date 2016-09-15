@@ -1,12 +1,10 @@
 package dto;
 
 import domain.Fees;
-import domain.Session;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.xml.bind.annotation.*;
-import java.util.List;
 
 /**
  * Created by helen on 30/08/2016.
@@ -26,9 +24,6 @@ public class Member {
     @XmlElement(name = "belt", required = true)
     protected String belt;
 
-    @XmlElement(name = "attendedSessions")
-    protected List<Session> attendedSessions;
-
     @XmlElement(name = "fees")
     protected Fees fees;
 
@@ -39,22 +34,18 @@ public class Member {
 
     public Member(String email,
                   String belt,
-                  List<Session> attendedSessions,
                   Fees fees) {
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
         this.fees = fees;
     }
 
     public Member(long id, String email,
                   String belt,
-                  List<Session> attendedSessions,
                   Fees fees) {
         this.id = id;
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
         this.fees = fees;
 
     }
@@ -65,14 +56,6 @@ public class Member {
 
     public void setFees(Fees fees) {
         this.fees = fees;
-    }
-
-    public List<Session> getAttendedSessions() {
-        return attendedSessions;
-    }
-
-    public void setAttendedSessions(List<Session> attendedSessions) {
-        this.attendedSessions = attendedSessions;
     }
 
     public long getId() {
@@ -132,7 +115,6 @@ public class Member {
                 append(id, rhs.id).
                 append(email, rhs.email).
                 append(belt, rhs.belt).
-                append(attendedSessions, rhs.attendedSessions).
                 isEquals();
     }
 
@@ -142,7 +124,6 @@ public class Member {
                 append(id).
                 append(email).
                 append(belt).
-                append(attendedSessions).
                 toHashCode();
     }
 

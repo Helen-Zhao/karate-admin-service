@@ -23,10 +23,6 @@ public class Member implements Serializable {
     @Enumerated(EnumType.STRING)
     protected Belt belt;
 
-    @ManyToMany
-    protected List<Session> attendedSessions;
-
-
     @Embedded
     protected Fees fees;
 
@@ -38,13 +34,11 @@ public class Member implements Serializable {
             long id,
             String email,
             Belt belt,
-            List<Session> attendedSessions,
             Fees fees) {
 
         this.id = id;
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
         this.fees = fees;
 
     }
@@ -52,12 +46,10 @@ public class Member implements Serializable {
     public Member(
             String email,
             Belt belt,
-            List<Session> attendedSessions,
             Fees fees) {
 
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
         this.fees = fees;
 
     }
@@ -68,7 +60,6 @@ public class Member implements Serializable {
     ) {
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = new ArrayList<>();
         this.fees = new Fees();
     }
 
@@ -78,14 +69,6 @@ public class Member implements Serializable {
 
     public void setFees(Fees fees) {
         this.fees = fees;
-    }
-
-    public List<Session> getAttendedSessions() {
-        return attendedSessions;
-    }
-
-    public void setAttendedSessions(List<Session> attendedSessions) {
-        this.attendedSessions = attendedSessions;
     }
 
     public long getId() {

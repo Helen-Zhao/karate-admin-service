@@ -1,40 +1,32 @@
-package services;
+package services.members;
 
-import domain.AUStudent;
 import domain.Belt;
+import domain.Member;
 
 /**
  * Created by helen on 30/08/2016.
  */
-public class AUStudentMapper {
-    static AUStudent toDomainModel(dto.AUStudent dtoAUStudent) {
-        AUStudent fullStudent = new AUStudent (
-                dtoAUStudent.getId(),
-                dtoAUStudent.getEmail(),
-                mapBeltToEnum(dtoAUStudent.getBelt()),
-                dtoAUStudent.getAttendedSessions(),
-                dtoAUStudent.getFees(),
-                dtoAUStudent.getAuid(),
-                dtoAUStudent.getUpi(),
-                dtoAUStudent.getPaidAnnualFee()
+public class MemberMapper {
+    static public Member toDomainModel(dto.Member dtoMember) {
+        Member fullMember = new Member(
+                dtoMember.getId(),
+                dtoMember.getEmail(),
+                mapBeltToEnum(dtoMember.getBelt()),
+                dtoMember.getFees()
         );
 
-        return fullStudent;
+        return fullMember;
     }
 
-    static dto.AUStudent toDto(AUStudent auStudent) {
-        dto.AUStudent dtoAUStudent = new dto.AUStudent(
-                auStudent.getId(),
-                auStudent.getEmail(),
-                mapBeltToString(auStudent.getBelt()),
-                auStudent.getAttendedSessions(),
-                auStudent.getFees(),
-                auStudent.getAuid(),
-                auStudent.getUpi(),
-                auStudent.isPaidAnnualFee()
+    static public dto.Member toDto(Member member) {
+        dto.Member dtoMember = new dto.Member(
+                member.getId(),
+                member.getEmail(),
+                mapBeltToString(member.getBelt()),
+                member.getFees()
         );
 
-        return dtoAUStudent;
+        return dtoMember;
     }
 
     static Belt mapBeltToEnum(String beltString) {

@@ -1,8 +1,9 @@
-package services;
+package services.members;
 
 import domain.AUStudent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.PersistenceManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

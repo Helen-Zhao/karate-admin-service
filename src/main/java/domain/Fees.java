@@ -13,6 +13,7 @@ public class Fees implements Serializable{
     private double outstandingBalance;
 
     public Fees() {
+        outstandingBalance = 0.0d;
     }
 
 

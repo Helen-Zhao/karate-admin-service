@@ -32,14 +32,12 @@ public class AUStudent extends Member{
 
     public AUStudent(String email,
                      String belt,
-                     List<Session> attendedSessions,
                      Fees fees,
                      int auid,
                      String upi,
                      boolean paidAnnualFee) {
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;
@@ -48,7 +46,6 @@ public class AUStudent extends Member{
     public AUStudent(long id,
                      String email,
                      String belt,
-                     List<Session> attendedSessions,
                      Fees fees,
                      int auid,
                      String upi,
@@ -57,7 +54,7 @@ public class AUStudent extends Member{
         this.id = id;
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
+        this.fees = fees;
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;
@@ -102,8 +99,6 @@ public class AUStudent extends Member{
             buffer.append(belt);
         }
         buffer.append("; ");
-        buffer.append(attendedSessions);
-        buffer.append("; ");
         buffer.append(auid);
         buffer.append("; ");
         buffer.append(upi);
@@ -127,7 +122,6 @@ public class AUStudent extends Member{
                 append(this.id, rhs.id).
                 append(this.email, rhs.email).
                 append(this.belt, rhs.belt).
-                append(this.attendedSessions, rhs.attendedSessions).
                 append(auid, rhs.auid).
                 append(upi, rhs.upi).
                 append(paidAnnualFee, rhs.paidAnnualFee).
@@ -140,7 +134,6 @@ public class AUStudent extends Member{
                 append(this.id).
                 append(this.email).
                 append(this.belt).
-                append(this.attendedSessions).
                 append(auid).
                 append(upi).
                 append(paidAnnualFee).

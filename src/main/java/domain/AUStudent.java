@@ -22,20 +22,29 @@ public class AUStudent extends Member implements Serializable {
     public AUStudent() {}
 
 
-    public AUStudent(String email, Belt belt, List<Session> attendedSessions, Fees fees, int auid, String upi, boolean paidAnnualFee) {
+    public AUStudent(String email, Belt belt, Fees fees, int auid, String upi, boolean paidAnnualFee) {
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
+        this.fees = fees;
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;
     }
 
-    public AUStudent(long id, String email, Belt belt, List<Session> attendedSessions, Fees fees, int auid, String upi, boolean paidAnnualFee) {
+    public AUStudent(String email, Belt belt, int auid, String upi, boolean paidAnnualFee) {
+        this.email = email;
+        this.belt = belt;
+        this.fees = new Fees();
+        this.auid = auid;
+        this.upi = upi;
+        this.paidAnnualFee = paidAnnualFee;
+    }
+
+
+    public AUStudent(long id, String email, Belt belt, Fees fees, int auid, String upi, boolean paidAnnualFee) {
         this.setId(id);
         this.email = email;
         this.belt = belt;
-        this.attendedSessions = attendedSessions;
         this.fees = fees;
         this.auid = auid;
         this.upi = upi;
