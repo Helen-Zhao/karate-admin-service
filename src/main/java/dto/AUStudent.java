@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.xml.bind.annotation.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by helen on 30/08/2016.
@@ -28,13 +30,15 @@ public class AUStudent extends Member{
 
     public AUStudent(String email,
                      String belt,
-                     int attendance,
+                     int attendanceCount,
+                     List<Date> attendance,
                      int auid,
                      String upi,
                      boolean paidAnnualFee) {
         this.set_email(email);
         this.set_belt(belt);
-        this.set_attendanceThisYear(attendance);
+        this.set_attendanceThisYear(attendanceCount);
+        this.setAttendance(attendance);
         this._auid = auid;
         this._upi = upi;
         this._paidAnnualFee = paidAnnualFee;
@@ -43,14 +47,16 @@ public class AUStudent extends Member{
     public AUStudent(long id,
                      String email,
                      String belt,
-                     int attendance,
+                     int attendanceCount,
+                     List<Date> attendance,
                      int auid,
                      String upi,
                      boolean paidAnnualFee) {
         this.setId(id);
         this.set_email(email);
         this.set_belt(belt);
-        this.set_attendanceThisYear(attendance);
+        this.set_attendanceThisYear(attendanceCount);
+        this.setAttendance(attendance);
         this._auid = auid;
         this._upi = upi;
         this._paidAnnualFee = paidAnnualFee;
@@ -97,6 +103,8 @@ public class AUStudent extends Member{
         buffer.append("; ");
         buffer.append(this.get_attendanceThisYear());
         buffer.append("; ");
+        buffer.append(this.getAttendance());
+        buffer.append("; ");
         buffer.append(_auid);
         buffer.append("; ");
         buffer.append(_upi);
@@ -121,6 +129,7 @@ public class AUStudent extends Member{
                 append(this.get_email(), rhs.get_email()).
                 append(this.get_belt(), rhs.get_belt()).
                 append(this.get_attendanceThisYear(), rhs.get_attendanceThisYear()).
+                append(this.getAttendance(), rhs.getAttendance()).
                 append(_auid, rhs._auid).
                 append(_upi, rhs._upi).
                 append(_paidAnnualFee, rhs._paidAnnualFee).
@@ -134,6 +143,7 @@ public class AUStudent extends Member{
                 append(this.get_email()).
                 append(this.get_belt()).
                 append(this.get_attendanceThisYear()).
+                append(this.getAttendance()).
                 append(_auid).
                 append(_upi).
                 append(_paidAnnualFee).

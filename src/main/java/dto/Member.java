@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.xml.bind.annotation.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by helen on 30/08/2016.
@@ -22,8 +24,11 @@ public class Member {
     @XmlElement(name = "belt", required = true)
     private String _belt;
 
-    @XmlElement(name = "attendance", required = true)
+    @XmlElement(name = "attendanceThisYear", required = true)
     private int _attendanceThisYear;
+
+    @XmlElement(name = "attendance", required = true)
+    private List<Date> attendance;
 
     public Member() {
 
@@ -31,19 +36,32 @@ public class Member {
 
     public Member(String email,
                   String belt,
-                  int attendance) {
+                  int attendanceThisYear,
+                  List<Date> attendance) {
         this._email = email;
         this._belt = belt;
-        this._attendanceThisYear = attendance;
+        this._attendanceThisYear = attendanceThisYear;
+        this.attendance = attendance;
     }
 
     public Member(long id, String email,
                   String belt,
-                  int attendance) {
+                  int attendanceThisYear,
+                  List<Date> attendance) {
         this._id = id;
         this._email = email;
         this._belt = belt;
-        this._attendanceThisYear = attendance;
+        this._attendanceThisYear = attendanceThisYear;
+        this.attendance = attendance;
+
+    }
+
+    public List<Date> getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(List<Date> attendance) {
+        this.attendance = attendance;
     }
 
     public long getId() {
@@ -113,6 +131,7 @@ public class Member {
                 append(_email, rhs._email).
                 append(_belt, rhs._belt).
                 append(_attendanceThisYear, rhs._attendanceThisYear).
+                append(attendance, rhs.attendance).
                 isEquals();
     }
 
@@ -123,6 +142,7 @@ public class Member {
                 append(_email).
                 append(_belt).
                 append(_attendanceThisYear).
+                append(attendance).
                 toHashCode();
     }
 

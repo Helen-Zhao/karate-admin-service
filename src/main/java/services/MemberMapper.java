@@ -1,5 +1,6 @@
 package services;
 
+import domain.Belt;
 import domain.Member;
 
 /**
@@ -11,7 +12,8 @@ public class MemberMapper {
                 dtoMember.getId(),
                 dtoMember.get_email(),
                 mapBeltToEnum(dtoMember.get_belt()),
-                dtoMember.get_attendanceThisYear()
+                dtoMember.get_attendanceThisYear(),
+                dtoMember.getAttendance()
         );
 
         return fullMember;
@@ -22,50 +24,51 @@ public class MemberMapper {
                 member.getId(),
                 member.getMemEmail(),
                 mapBeltToString(member.getBelt()),
-                member.getAttendanceThisYear()
+                member.getAttendanceCount(),
+                member.getAttendance()
         );
 
         return dtoMember;
     }
 
-    static Member.Belt mapBeltToEnum(String beltString) {
+    static Belt mapBeltToEnum(String beltString) {
         switch (beltString) {
             case "black_1_dan":
-                return Member.Belt.BLACK_FIRST_DAN;
+                return Belt.BLACK_FIRST_DAN;
             case "black_2_dan":
-                return Member.Belt.BLACK_SECOND_DAN;
+                return Belt.BLACK_SECOND_DAN;
             case "black_3_dan":
-                return Member.Belt.BLACK_THIRD_DAN;
+                return Belt.BLACK_THIRD_DAN;
             case "black_4_dan":
-                return Member.Belt.BLACK_FOURTH_DAN;
+                return Belt.BLACK_FOURTH_DAN;
             case "brown_1_tab":
-                return Member.Belt.BROWN_ONE_TAB;
+                return Belt.BROWN_ONE_TAB;
             case "brown_2_tab":
-                return Member.Belt.BROWN_TWO_TAB;
+                return Belt.BROWN_TWO_TAB;
             case "brown":
-                return Member.Belt.BROWN;
+                return Belt.BROWN;
             case "green_tab":
-                return Member.Belt.GREEN_TAB;
+                return Belt.GREEN_TAB;
             case "green":
-                return Member.Belt.GREEN;
+                return Belt.GREEN;
             case "yellow_tab":
-                return Member.Belt.YELLOW_TAB;
+                return Belt.YELLOW_TAB;
             case "yellow":
-                return Member.Belt.YELLOW;
+                return Belt.YELLOW;
             case "blue_tab":
-                return Member.Belt.BLUE_TAB;
+                return Belt.BLUE_TAB;
             case "blue":
-                return Member.Belt.BLUE;
+                return Belt.BLUE;
             case "white_tab":
-                return Member.Belt.WHITE_TAB;
+                return Belt.WHITE_TAB;
             case "white":
-                return Member.Belt.WHITE;
+                return Belt.WHITE;
         }
 
         return null;
     }
 
-    static String mapBeltToString(Member.Belt belt) {
+    static String mapBeltToString(Belt belt) {
         switch (belt) {
             case BLACK_FIRST_DAN:
                 return "black_1_dan";

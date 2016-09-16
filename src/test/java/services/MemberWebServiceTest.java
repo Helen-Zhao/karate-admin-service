@@ -1,5 +1,6 @@
 package services;
 
+import domain.Belt;
 import domain.Member;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -13,6 +14,8 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -53,8 +56,9 @@ public class MemberWebServiceTest {
     public void addMember() {
         Member member = new Member(
                 "lalal@example.com",
-                Member.Belt.BLACK_FIRST_DAN,
-                100
+                Belt.BLACK_FIRST_DAN,
+                100,
+                new ArrayList<Date>()
         );
 
         dto.Member dtoMember = MemberMapper.toDto(member);
@@ -78,7 +82,7 @@ public class MemberWebServiceTest {
 
         Member memberFromService = MemberMapper.toDomainModel(dtoMemberFromService);
 
-        assertEquals(member.getAttendanceThisYear(), memberFromService.getAttendanceThisYear());
+        assertEquals(member.getAttendanceCount(), memberFromService.getAttendanceCount());
         assertEquals(member.getBelt(), memberFromService.getBelt());
         assertEquals(member.getMemEmail(), memberFromService.getMemEmail());
     }
@@ -87,8 +91,9 @@ public class MemberWebServiceTest {
     public void updateMember() {
         Member member = new Member(
                 "booooo@example.com",
-                Member.Belt.YELLOW,
-                25
+                Belt.YELLOW,
+                25,
+                new ArrayList<Date>()
         );
 
         dto.Member dtoMember = MemberMapper.toDto(member);
@@ -117,8 +122,9 @@ public class MemberWebServiceTest {
          *
          */
 
-        memberFromService.setBelt(Member.Belt.YELLOW_TAB);
-        memberFromService.setAttendanceThisYear(memberFromService.getAttendanceThisYear() + 1);
+        memberFromService.setBelt(Belt.YELLOW_TAB);
+        memberFromService.setAttendanceCount(memberFromService.getAttendanceCount() + 1);
+        memberFromService.getAttendance().add(new Date());
 
         dtoMember = MemberMapper.toDto(memberFromService);
         Response response1 = _client.
@@ -142,7 +148,7 @@ public class MemberWebServiceTest {
         Member updatedMemberFromService = MemberMapper.toDomainModel(updatedDtoMemberFromService);
 
 
-        assertEquals(memberFromService.getAttendanceThisYear(), updatedMemberFromService.getAttendanceThisYear());
+        assertEquals(memberFromService.getAttendanceCount(), updatedMemberFromService.getAttendanceCount());
         assertEquals(memberFromService.getBelt(), updatedMemberFromService.getBelt());
         assertEquals(memberFromService.getMemEmail(), updatedMemberFromService.getMemEmail());
     }
