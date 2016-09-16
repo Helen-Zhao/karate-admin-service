@@ -4,6 +4,7 @@
 
     <persistence-unit name="MemberPU">
         <class>domain.Member</class>
+        <class>domain.AUStudent</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/hello;mv_store=false;"/>

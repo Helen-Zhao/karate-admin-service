@@ -1,17 +1,21 @@
 package services;
 
+import domain.Belt;
 import domain.Member;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import services.members.MemberMapper;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -36,30 +40,6 @@ public class MemberWebServiceTest {
     }
 
     /**
-     * Runs before each unit test to restore Web service database. This ensures
-     * that each test is independent; each test runs on a Web service that has
-     * been initialised with a common set of Parolees.
-     */
-//    @Before
-//    public void reloadServerData() {
-//        Response response = _client
-//                .target(WEB_SERVICE_URI).request()
-//                .put(null);
-//        response.close();
-//
-//        // Pause briefly before running any tests. Test addParoleeMovement(),
-//        // for example, involves creating a timestamped value (a movement) and
-//        // having the Web service compare it with data just generated with
-//        // timestamps. Joda's Datetime class has only millisecond precision,
-//        // so pause so that test-generated timestamps are actually later than
-//        // timestamped values held by the Web service.
-//        try {
-//            Thread.sleep(10);
-//        } catch (InterruptedException e) {
-//        }
-//    }
-
-    /**
      * One-time finalisation method that destroys the Web service client.
      */
     @AfterClass
@@ -75,8 +55,7 @@ public class MemberWebServiceTest {
     public void addMember() {
         Member member = new Member(
                 "lalal@example.com",
-                Member.Belt.BLACK_FIRST_DAN,
-                100
+                Belt.BLACK_FIRST_DAN
         );
 
         dto.Member dtoMember = MemberMapper.toDto(member);
@@ -100,17 +79,15 @@ public class MemberWebServiceTest {
 
         Member memberFromService = MemberMapper.toDomainModel(dtoMemberFromService);
 
-        assertEquals(member.getAttendanceThisYear(), memberFromService.getAttendanceThisYear());
         assertEquals(member.getBelt(), memberFromService.getBelt());
-        assertEquals(member.getMemEmail(), memberFromService.getMemEmail());
+        assertEquals(member.getEmail(), memberFromService.getEmail());
     }
 
     @Test
     public void updateMember() {
         Member member = new Member(
                 "booooo@example.com",
-                Member.Belt.YELLOW,
-                25
+                Belt.YELLOW
         );
 
         dto.Member dtoMember = MemberMapper.toDto(member);
@@ -139,8 +116,7 @@ public class MemberWebServiceTest {
          *
          */
 
-        memberFromService.setBelt(Member.Belt.YELLOW_TAB);
-        memberFromService.setAttendanceThisYear(memberFromService.getAttendanceThisYear() + 1);
+        memberFromService.setBelt(Belt.YELLOW_TAB);
 
         dtoMember = MemberMapper.toDto(memberFromService);
         Response response1 = _client.
@@ -148,24 +124,32 @@ public class MemberWebServiceTest {
                 .request()
                 .put(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
 
-        if (response.getStatus() != 201) {
-            fail("Failed to create new Member");
+        if (response1.getStatus() != 204) {
+            fail("Failed to update Member");
         }
 
-        location = response.getLocation().toString();
         response.close();
 
-        dto.Member updatedDtoMemberFromService = _client.target(location)
+
+        dto.Member updatedDtoMemberFromService = _client.target(WEB_SERVICE_URI + "/" + memberFromService.getId())
                 .request()
                 .accept(MediaType.APPLICATION_XML)
                 .get(dto.Member.class);
 
         Member updatedMemberFromService = MemberMapper.toDomainModel(updatedDtoMemberFromService);
 
-
-        assertEquals(memberFromService.getAttendanceThisYear(), updatedMemberFromService.getAttendanceThisYear());
         assertEquals(memberFromService.getBelt(), updatedMemberFromService.getBelt());
-        assertEquals(memberFromService.getMemEmail(), updatedMemberFromService.getMemEmail());
+        assertEquals(memberFromService.getEmail(), updatedMemberFromService.getEmail());
+    }
+
+    @Test
+    public void getAllMembers() {
+        GenericType<List<dto.Member>> list = new GenericType<List<dto.Member>>() {};
+        List<dto.Member> members = _client.target(WEB_SERVICE_URI)
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(list);
+        System.out.println(members.size());
     }
 
 

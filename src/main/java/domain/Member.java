@@ -2,6 +2,8 @@ package domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by helen on 29/08/2016.
@@ -9,12 +11,20 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "MEMBERS")
+@Inheritance(strategy = InheritanceType.JOINED)
+
 public class Member implements Serializable {
 
-    private long id;
-    private String memEmail;
-    private Belt belt;
-    private int attendanceThisYear;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
+    protected String email;
+
+    @Enumerated(EnumType.STRING)
+    protected Belt belt;
+
+    @Embedded
+    protected Fees fees;
 
     protected Member() {
 
@@ -24,28 +34,43 @@ public class Member implements Serializable {
             long id,
             String email,
             Belt belt,
-            int attendanceThisYear) {
+            Fees fees) {
 
         this.id = id;
-        this.memEmail = email;
+        this.email = email;
         this.belt = belt;
-        this.attendanceThisYear = attendanceThisYear;
+        this.fees = fees;
 
     }
 
     public Member(
             String email,
             Belt belt,
-            int attendanceThisYear) {
+            Fees fees) {
 
-        this.memEmail = email;
+        this.email = email;
         this.belt = belt;
-        this.attendanceThisYear = attendanceThisYear;
+        this.fees = fees;
 
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Member(
+            String email,
+            Belt belt
+    ) {
+        this.email = email;
+        this.belt = belt;
+        this.fees = new Fees();
+    }
+
+    public Fees getFees() {
+        return fees;
+    }
+
+    public void setFees(Fees fees) {
+        this.fees = fees;
+    }
+
     public long getId() {
         return this.id;
     }
@@ -54,12 +79,12 @@ public class Member implements Serializable {
         this.id = _memberId;
     }
 
-    public String getMemEmail() {
-        return memEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMemEmail(String memEmail) {
-        this.memEmail = memEmail;
+    public void setEmail(String memEmail) {
+        this.email = memEmail;
     }
 
     public Belt getBelt() {
@@ -70,31 +95,6 @@ public class Member implements Serializable {
         this.belt = belt;
     }
 
-    public int getAttendanceThisYear() {
-        return attendanceThisYear;
-    }
-
-    public void setAttendanceThisYear(int attendanceThisYear) {
-        this.attendanceThisYear = attendanceThisYear;
-    }
-
-    public enum Belt {
-        BLACK_FOURTH_DAN,
-        BLACK_THIRD_DAN,
-        BLACK_SECOND_DAN,
-        BLACK_FIRST_DAN,
-        BROWN_TWO_TAB,
-        BROWN_ONE_TAB,
-        BROWN,
-        GREEN_TAB,
-        GREEN,
-        YELLOW_TAB,
-        YELLOW,
-        BLUE_TAB,
-        BLUE,
-        WHITE_TAB,
-        WHITE
-    }
 }
 
 

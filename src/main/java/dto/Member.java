@@ -1,5 +1,6 @@
 package dto;
 
+import domain.Fees;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -9,21 +10,23 @@ import javax.xml.bind.annotation.*;
  * Created by helen on 30/08/2016.
  */
 
+@XmlType(name = "dtoMember")
 @XmlRootElement(name = "member")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Member {
 
     @XmlAttribute(name = "id")
-    private long _id;
+    protected long id;
 
     @XmlElement(name = "email", required = true)
-    private String _email;
+    protected String email;
 
     @XmlElement(name = "belt", required = true)
-    private String _belt;
+    protected String belt;
 
-    @XmlElement(name = "attendance", required = true)
-    private int _attendanceThisYear;
+    @XmlElement(name = "fees")
+    protected Fees fees;
+
 
     public Member() {
 
@@ -31,69 +34,69 @@ public class Member {
 
     public Member(String email,
                   String belt,
-                  int attendance) {
-        this._email = email;
-        this._belt = belt;
-        this._attendanceThisYear = attendance;
+                  Fees fees) {
+        this.email = email;
+        this.belt = belt;
+        this.fees = fees;
     }
 
     public Member(long id, String email,
                   String belt,
-                  int attendance) {
-        this._id = id;
-        this._email = email;
-        this._belt = belt;
-        this._attendanceThisYear = attendance;
+                  Fees fees) {
+        this.id = id;
+        this.email = email;
+        this.belt = belt;
+        this.fees = fees;
+
+    }
+
+    public Fees getFees() {
+        return fees;
+    }
+
+    public void setFees(Fees fees) {
+        this.fees = fees;
     }
 
     public long getId() {
-        return _id;
+        return id;
     }
 
     public void setId(long _id) {
-        this._id = _id;
+        this.id = _id;
     }
 
-    public String get_email() {
-        return _email;
+    public String getEmail() {
+        return email;
     }
 
-    public void set_email(String _email) {
-        this._email = _email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String get_belt() {
-        return _belt;
+    public String getBelt() {
+        return belt;
     }
 
-    public void set_belt(String _belt) {
-        this._belt = _belt;
+    public void setBelt(String belt) {
+        this.belt = belt;
     }
 
-    public int get_attendanceThisYear() {
-        return _attendanceThisYear;
-    }
-
-    public void set_attendanceThisYear(int _attendanceThisYear) {
-        this._attendanceThisYear = _attendanceThisYear;
-    }
 
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append("Member: { [");
-        buffer.append(_id);
+        buffer.append(id);
         buffer.append("]; ");
-        if (_email != null) {
-            buffer.append(_email);
+        if (email != null) {
+            buffer.append(email);
             buffer.append("; ");
         }
-        if (_belt != null) {
-            buffer.append(_belt);
+        if (belt != null) {
+            buffer.append(belt);
         }
-        buffer.append("; ");
-        buffer.append(_attendanceThisYear);
         buffer.append("; ");
         buffer.append(" }");
 
@@ -109,20 +112,18 @@ public class Member {
 
         Member rhs = (Member) obj;
         return new EqualsBuilder().
-                append(_id, rhs._id).
-                append(_email, rhs._email).
-                append(_belt, rhs._belt).
-                append(_attendanceThisYear, rhs._attendanceThisYear).
+                append(id, rhs.id).
+                append(email, rhs.email).
+                append(belt, rhs.belt).
                 isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31).
-                append(_id).
-                append(_email).
-                append(_belt).
-                append(_attendanceThisYear).
+                append(id).
+                append(email).
+                append(belt).
                 toHashCode();
     }
 
