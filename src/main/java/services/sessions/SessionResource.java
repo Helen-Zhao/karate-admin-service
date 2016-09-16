@@ -43,8 +43,8 @@ public class SessionResource {
         }
 
         boolean ignoreCache = false;
-        if (cookie != null) {
-            ignoreCache = cookie.getValue().equals("ignore-cache") ? true : false;
+        if (cookie != null && cookie.getValue() != null) {
+            ignoreCache = cookie.getValue().equals("ignore-cache");
         }
 
         Session session;
@@ -79,16 +79,8 @@ public class SessionResource {
     @Path("/{date}")
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateSession(
-            String strDate) {
-        Date date;
-        try {
-            _logger.info(strDate);
-            date = sdf.parse(strDate);
-        } catch (ParseException e) {
-            throw new WebApplicationException(Response.Status.BAD_REQUEST);
-        }
-
-        em.merge(date);
+            Session session) {
+        em.merge(session);
 
         return Response.noContent().build();
 

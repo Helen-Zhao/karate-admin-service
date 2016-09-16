@@ -5,6 +5,7 @@ package domain;
  */
 public enum Belt
 {
+    BLACK_FIFTH_DAN,
     BLACK_FOURTH_DAN,
     BLACK_THIRD_DAN,
     BLACK_SECOND_DAN,

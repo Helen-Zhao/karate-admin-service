@@ -16,6 +16,9 @@ public class Fees implements Serializable{
         outstandingBalance = 0.0d;
     }
 
+    void chargeFees(double toCharge) {
+        outstandingBalance += toCharge;
+    }
 
     public double getOutstandingBalance() {
         return outstandingBalance;
