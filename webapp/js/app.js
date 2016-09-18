@@ -18,7 +18,7 @@ function notify(message){
 }
 
 function swapPage() {
-  document.getElementbyId("content").innerHTML =
+  // document.getElementbyId("content").innerHTML =
 }
 
 function populateTable(xml) {

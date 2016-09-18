@@ -1,9 +1,11 @@
 package services.sessions;
 
+import domain.Member;
 import domain.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
+import services.members.MemberMapper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +33,7 @@ public class SessionResource {
     @GET
     @Path("/{date}")
     @Produces(MediaType.APPLICATION_XML)
-    public Session getMember(@PathParam("date") String strDate, @CookieParam("cache")
+    public Session getSession(@PathParam("date") String strDate, @CookieParam("cache")
             NewCookie cookie) {
 
         //Determine if date param is valid
@@ -53,11 +55,12 @@ public class SessionResource {
             session = sessionDB.get(date);
         } else {
             session = em.find(Session.class, date);
-            sessionDB.put(session.getDate(), session);
         }
 
         if (session == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            sessionDB.put(session.getDate(), session);
         }
         return session;
     }
@@ -67,12 +70,15 @@ public class SessionResource {
     public Response createSession(
             Session session) {
 
+        Session existingSession = em.find(Session.class, session.getDate());
 
-
+        if (existingSession == null) {
             em.getTransaction().begin();
             em.persist(session);
             em.getTransaction().commit();
-
+        } else {
+            em.merge(session);
+        }
 
         return Response.created(URI.create("service/sessions/" + sdf.format(session.getDate()))).build();
     }
@@ -89,5 +95,14 @@ public class SessionResource {
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.
 
+    }
+
+    @DELETE
+    @Path("/{id")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void deleteSession(Session session) {
+        em.getTransaction().begin();
+        em.remove(session);
+        em.getTransaction().commit();
     }
 }

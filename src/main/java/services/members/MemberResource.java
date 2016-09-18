@@ -112,4 +112,14 @@ public class MemberResource {
 
     }
 
+    @DELETE
+    @Path("/{id")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void deleteMember(dto.Member dtoMember) {
+        Member member = MemberMapper.toDomainModel(dtoMember);
+        em.getTransaction().begin();
+        em.remove(member);
+        em.getTransaction().commit();
+    }
+
 }

@@ -1,6 +1,7 @@
 package services.sessions;
 
 import domain.Grading;
+import domain.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
@@ -26,7 +27,7 @@ public class GradingResource {
     public SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
 
     private static final Logger _logger = LoggerFactory.getLogger(services.members.MemberResource.class);
-    private Map<Date, Grading> GradingDB = new ConcurrentHashMap<Date, Grading>();
+    private Map<Date, Grading> gradingDB = new ConcurrentHashMap<Date, Grading>();
 
     @GET
     @Path("/{date}")
@@ -46,20 +47,23 @@ public class GradingResource {
         if (cookie != null && cookie.getValue() != null) {
             ignoreCache = cookie.getValue().equals("ignore-cache");
         }
-
-        Grading Grading;
+        _logger.info("" + date + strDate);
+        Grading grading;
         //Determine if Grading exists in cache
-        if (GradingDB.containsKey(date) && !ignoreCache) {
-            Grading = GradingDB.get(date);
+        if (gradingDB.containsKey(date) && !ignoreCache) {
+            _logger.info("wrong if");
+            grading = gradingDB.get(date);
         } else {
-            Grading = em.find(Grading.class, date);
-            GradingDB.put(Grading.getDate(), Grading);
+            grading = em.find(Grading.class, date);
+            _logger.info("in find");
         }
 
-        if (Grading == null) {
+        if (grading == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            gradingDB.put(grading.getDate(), grading);
         }
-        return Grading;
+        return grading;
     }
 
     @POST
@@ -67,14 +71,11 @@ public class GradingResource {
     public Response createGrading(
             Grading Grading) {
 
-
-
         em.getTransaction().begin();
         em.persist(Grading);
         em.getTransaction().commit();
 
-
-        return Response.created(URI.create("service/Gradings/" + sdf.format(Grading.getDate()))).build();
+        return Response.created(URI.create("service/gradings/" + sdf.format(Grading.getDate()))).build();
     }
 
     @PUT
@@ -89,5 +90,15 @@ public class GradingResource {
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.
 
+    }
+
+
+    @DELETE
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void deleteGrading(Grading grading) {
+        em.getTransaction().begin();
+        em.remove(grading);
+        em.getTransaction().commit();
     }
 }

@@ -4,6 +4,7 @@ import services.members.AUStudentResolver;
 import services.members.AUStudentResource;
 import services.members.MemberResolver;
 import services.members.MemberResource;
+import services.sessions.GradingResource;
 import services.sessions.SessionResolver;
 import services.sessions.SessionResource;
 
@@ -28,9 +29,11 @@ public class KarateAdminApplication extends Application {
         MemberResource mr = new MemberResource();
         AUStudentResource asr = new AUStudentResource();
         SessionResource sr = new SessionResource();
+        GradingResource gr = new GradingResource();
         singletons.add(sr);
         singletons.add(mr);
         singletons.add(asr);
+        singletons.add(gr);
         singletons.add(PersistenceManager.instance());
 
         classes.add(MemberResolver.class);

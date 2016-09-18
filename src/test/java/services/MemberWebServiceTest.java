@@ -149,8 +149,6 @@ public class MemberWebServiceTest {
                 .request()
                 .accept(MediaType.APPLICATION_XML)
                 .get(list);
-        System.out.println(members.size());
     }
-
 
 }

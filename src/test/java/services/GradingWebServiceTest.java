@@ -1,9 +1,6 @@
 package services;
 
-import domain.AUStudent;
-import domain.Belt;
-import domain.Member;
-import domain.Session;
+import domain.*;
 import org.apache.commons.lang3.time.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -23,13 +20,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by helen on 15/09/2016.
  */
-public class SessionWebServiceTest {
-    private static final String WEB_SERVICE_URI = "http://localhost:8000/service/sessions";
+public class GradingWebServiceTest {
+    private static final String WEB_SERVICE_URI = "http://localhost:8000/service/gradings";
 
     private static final Logger _logger = LoggerFactory.getLogger(MemberWebServiceTest.class);
 
@@ -57,80 +56,70 @@ public class SessionWebServiceTest {
 
 
     @Test
-    public void testCreateSessionCascadeMember() {
-
-        Session session = new Session();
+    public void testCreateGradingCascadeMember() {
+        Date today = DateUtils.ceiling(DateUtils.addDays(new Date(), 3), Calendar.DAY_OF_MONTH);
+        Grading grading = new Grading(today);
         Member member = new Member(
-                "hello@auckland",
-                Belt.WHITE
+                "atagrading@sldfkndfklsnfesk",
+                Belt.BROWN_ONE_TAB
         );
-        session.getAttendees().add(member);
+        grading.getAttendees().add(member);
         Response response = _client.
                 target(WEB_SERVICE_URI)
                 .request()
-                .post(javax.ws.rs.client.Entity.entity(session, MediaType.APPLICATION_XML));
+                .post(Entity.entity(grading, MediaType.APPLICATION_XML));
 
         if (response.getStatus() != 201) {
-            fail("Failed to create new Session");
+            fail("Failed to create new Grading");
         }
 
         String location = response.getLocation().toString();
+        _logger.info("location:" + location);
         response.close();
 
-        Session sessionFromService = _client.target(location)
+        Grading gradingFromService = _client.target(location)
                 .request()
                 .accept(MediaType.APPLICATION_XML)
-                .get(Session.class);
+                .get(Grading.class);
 
-        assertEquals(session.getDate(), sessionFromService.getDate());
-        assertTrue(sessionFromService.getAttendees().size() > 0);
-    }
+        assertEquals(grading.getDate(), gradingFromService.getDate());
+        assertTrue(gradingFromService != null && gradingFromService.getAttendees().size() > 0);
 
-    @Test
-    public void testGetSessionCascadeStudent() {
-
-        Date today = DateUtils.ceiling(new Date(), Calendar.DAY_OF_MONTH);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
-        Session session = _client.
+        Grading newGrading = _client.
                 target(WEB_SERVICE_URI + "/" + sdf.format(today))
                 .request()
                 .accept(MediaType.APPLICATION_XML)
-                .get(Session.class);
+                .get(Grading.class);
 
-        session.getAttendees().add(
+        newGrading.getAttendees().add(
                 new AUStudent(
-                        "somestudent@uoa.hi",
-                        Belt.WHITE,
-                        32324,
-                        "jssj333",
+                        "eagerstudent@aucklanduni.ac.nz",
+                        Belt.YELLOW_TAB,
+                        2234323,
+                        "ddd333",
                         false
-        ));
+                ));
 
-        //update session
-        Response response = _client
+        //update grading
+        Response response1 = _client
                 .target(WEB_SERVICE_URI + "/" + sdf.format(today))
                 .request()
-                .put(Entity.entity(session, MediaType.APPLICATION_XML));
+                .put(Entity.entity(newGrading, MediaType.APPLICATION_XML));
 
-        if  (response.getStatus() != 204) {
-            fail("Failed to update session");
+        if  (response1.getStatus() != 204) {
+            fail("Failed to update grading");
         }
 
-        Session updatedSession = _client.
+        Grading updatedGrading = _client.
                 target(WEB_SERVICE_URI + "/" + sdf.format(today))
                 .request()
                 .accept(MediaType.APPLICATION_XML)
                 .cookie(new NewCookie("cache", "ignore-cache"))
-                .get(Session.class);
+                .get(Grading.class);
 
-        assertEquals(session.getDate(), updatedSession.getDate());
-        assertEquals(session.getAttendees().get(0).getId(), updatedSession.getAttendees().get(0).getId());
+        assertEquals(newGrading.getDate(), updatedGrading.getDate());
+        assertTrue(updatedGrading != null && updatedGrading.getAttendees().size() > 0);
+
     }
-
-
-
-
-
-
-
 }

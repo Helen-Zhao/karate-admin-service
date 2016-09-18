@@ -1,6 +1,7 @@
 package services.members;
 
 import domain.AUStudent;
+import domain.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
@@ -90,6 +91,16 @@ public class AUStudentResource {
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.
 
+    }
+
+    @DELETE
+    @Path("/{id")
+    @Consumes(MediaType.APPLICATION_XML)
+    public void deleteStudent(dto.AUStudent dtoAuStudent) {
+        AUStudent student = AUStudentMapper.toDomainModel(dtoAuStudent);
+        em.getTransaction().begin();
+        em.remove(student);
+        em.getTransaction().commit();
     }
 
 }

@@ -3,20 +3,30 @@ package services;
 import domain.AUStudent;
 import domain.Belt;
 import domain.Fees;
+import dto.Member;
+import org.jboss.resteasy.util.GenericType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.members.AUStudentMapper;
+import services.members.MemberMapper;
 
+import javax.persistence.Query;
+import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -89,80 +99,81 @@ public class AUStudentWebServiceTest {
         assertEquals(student.getUpi(), studentFromService.getUpi());
         assertEquals(student.isPaidAnnualFee(), studentFromService.isPaidAnnualFee());
     }
-//
-//    @Test
-//    public void updateMember() {
-//        Member member = new Member(
-//                "booooo@example.com",
-//                Belt.YELLOW,
-//                25
-//        );
-//
-//        dto.Member dtoMember = MemberMapper.toDto(member);
-//
-//        Response response = _client.
-//                target(WEB_SERVICE_URI)
-//                .request()
-//                .post(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
-//
-//        if (response.getStatus() != 201) {
-//            fail("Failed to create new Member");
-//        }
-//
-//        String location = response.getLocation().toString();
-//        response.close();
-//
-//        dto.Member dtoMemberFromService = _client.target(location)
-//                .request()
-//                .accept(MediaType.APPLICATION_XML)
-//                .get(dto.Member.class);
-//
-//        Member memberFromService = MemberMapper.toDomainModel(dtoMemberFromService);
-//
-//        /**
-//         * Updating
-//         *
-//         */
-//
-//        memberFromService.setBelt(Belt.YELLOW_TAB);
-//        memberFromService.setAttendanceThisYear(memberFromService.getAttendanceThisYear() + 1);
-//
-//        dtoMember = MemberMapper.toDto(memberFromService);
-//        Response response1 = _client.
-//                target(WEB_SERVICE_URI + "/" + dtoMember.getId())
-//                .request()
-//                .put(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
-//
-//        if (response1.getStatus() != 204) {
-//            fail("Failed to update Member");
-//        }
-//
-//        response.close();
-//
-//
-//
-//        dto.Member updatedDtoMemberFromService = _client.target(WEB_SERVICE_URI + "/" + memberFromService.getId())
-//                .request()
-//                .accept(MediaType.APPLICATION_XML)
-//                .get(dto.Member.class);
-//
-//        Member updatedMemberFromService = MemberMapper.toDomainModel(updatedDtoMemberFromService);
-//
-//
-//        assertEquals(memberFromService.getAttendanceThisYear(), updatedMemberFromService.getAttendanceThisYear());
-//        assertEquals(memberFromService.getBelt(), updatedMemberFromService.getBelt());
-//        assertEquals(memberFromService.getMemEmail(), updatedMemberFromService.getMemEmail());
-//    }
-//
-//    @Test
-//    public void getAllMembers() {
-//        GenericType<List<dto.Member>> list = new GenericType<List<dto.Member>>() {};
-//        List<dto.Member> members = _client.target(WEB_SERVICE_URI)
-//                .request()
-//                .accept(MediaType.APPLICATION_XML)
-//                .get(list);
-//        System.out.println(members.size());
-//    }
 
+    @Test
+    public void updateStudent() {
+        AUStudent student = new AUStudent(
+                "cooleststudent@lslalala.ss",
+                Belt.GREEN_TAB,
+                new Fees(12.9d),
+                1234124,
+                "hzhsa2882",
+                true
+
+        );
+
+        dto.AUStudent dtoStudent= AUStudentMapper.toDto(student);
+
+        Response response = _client.
+                target(WEB_SERVICE_URI)
+                .request()
+                .post(Entity.entity(dtoStudent, MediaType.APPLICATION_XML));
+
+        if (response.getStatus() != 201) {
+            fail("Failed to create new Member");
+        }
+
+        String location = response.getLocation().toString();
+        response.close();
+
+        dto.AUStudent dtoStudentFromService = _client.target(location)
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(dto.AUStudent.class);
+
+        AUStudent studentFromService = AUStudentMapper.toDomainModel(dtoStudentFromService);
+
+        /**
+         * Updating
+         *
+         */
+
+        studentFromService.setBelt(Belt.BROWN);
+
+        dtoStudent = AUStudentMapper.toDto(studentFromService);
+        Response response1 = _client.
+                target(WEB_SERVICE_URI + "/" + dtoStudent.getId())
+                .request()
+                .put(Entity.entity(dtoStudent, MediaType.APPLICATION_XML));
+
+        if (response1.getStatus() != 204) {
+            fail("Failed to update student");
+        }
+
+        response.close();
+
+        dto.AUStudent updatedDtostudentFromService = _client.target(WEB_SERVICE_URI + "/" + studentFromService.getId())
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(dto.AUStudent.class);
+
+        AUStudent updatedStudentFromService = AUStudentMapper.toDomainModel(updatedDtostudentFromService);
+
+
+        assertEquals(studentFromService.getBelt(), updatedStudentFromService.getBelt());
+        assertEquals(studentFromService.getEmail(), updatedStudentFromService.getEmail());
+    }
+
+    @Test
+    public void getAllMembers() {
+        javax.ws.rs.core.GenericType<List<dto.AUStudent>> list = new javax.ws.rs.core.GenericType<List<dto.AUStudent>>() {};
+        List<dto.AUStudent> students = _client.target(WEB_SERVICE_URI)
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(list);
+
+        _logger.info("" + students.size());
+        assertTrue(students != null && students.size() > 0);
+    }
 
 }
