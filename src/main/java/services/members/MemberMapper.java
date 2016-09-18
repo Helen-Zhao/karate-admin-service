@@ -29,7 +29,7 @@ public class MemberMapper {
         return dtoMember;
     }
 
-    static Belt mapBeltToEnum(String beltString) {
+    public static Belt mapBeltToEnum(String beltString) {
         switch (beltString) {
             case "black_1_dan":
                 return Belt.BLACK_FIRST_DAN;

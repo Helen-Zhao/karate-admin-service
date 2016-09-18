@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Created by helen on 29/08/2016.
  */
-@Path("/students")
+@Path("service/students")
 public class AUStudentResource {
     @PersistenceContext
     EntityManager em = PersistenceManager.instance().createEntityManager();
@@ -70,7 +70,7 @@ public class AUStudentResource {
         em.getTransaction().commit();
 
 
-        return Response.created(URI.create("students/" + AUStudent.getId())).build();
+        return Response.created(URI.create("service/students/" + AUStudent.getId())).build();
     }
 
     @PUT

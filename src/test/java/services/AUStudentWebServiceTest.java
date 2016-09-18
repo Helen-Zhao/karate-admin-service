@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
  * Created by helen on 30/08/2016.
  */
 public class AUStudentWebServiceTest {
-    private static final String WEB_SERVICE_URI = "http://localhost:8000/students";
+    private static final String WEB_SERVICE_URI = "http://localhost:8000/service/students";
 
     private static final Logger _logger = LoggerFactory.getLogger(AUStudentWebServiceTest.class);
 

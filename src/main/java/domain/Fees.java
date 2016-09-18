@@ -1,5 +1,6 @@
 package domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -8,13 +9,18 @@ import java.io.Serializable;
  */
 
 @Embeddable
-public class Fees implements Serializable{
+public class Fees implements Serializable {
 
     private double outstandingBalance;
 
     public Fees() {
         outstandingBalance = 0.0d;
     }
+
+    public Fees(double outstandingBalance) {
+        this.outstandingBalance = outstandingBalance;
+    }
+
 
     void chargeFees(double toCharge) {
         outstandingBalance += toCharge;

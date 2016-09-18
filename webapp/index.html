@@ -1,87 +1,192 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>Karate Admin Helper</title>
-  <meta name="description" content="Admin helper for UoA Karate Club">
-  <meta name="author" content="Helen">
+    <title>UoA Karate Club Admin</title>
 
-  <link rel="stylesheet" href="css/mdl-styles.css">
-  <link rel="stylesheet" href="css/material.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"><link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue_grey-red.min.css" />
-  <link rel="stylesheet" href="css/styles.css">
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
-    <style>
-  #view-source {
-    position: fixed;
-    display: block;
-    right: 0;
-    bottom: 0;
-    margin-right: 40px;
-    margin-bottom: 40px;
-    z-index: 900;
-  }
-</style>
+    <!--Toastr-->
+    <link rel="stylesheet" href="toastr/toastr.min.css">
+
+    <!--Material Design Lite -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.teal-indigo.min.css">
+
+    <!-- Material Design for Bootstrap Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Material Design for Bootstrap -->
+    <link href="css/mdb.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/xyz-custom.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="grey-bg mdl-layout mdl-js-layout mdl-layout--fixed-header">
-  <div class="android-header mdl-layout__header mdl-layout__header--waterfall">
-    <div class="mdl-layout__header-row">
-          <span class="android-title mdl-layout-title">
-            <h3 class = "karate-logo mdl-typography--text-uppercase">UoA Karate Club</h3>
-          </span>
-      <!-- Add spacer, to align navigation to the right in desktop -->
-      <div class="android-header-spacer mdl-layout-spacer"></div>
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right mdl-textfield--full-width">
-        <label class="mdl-button mdl-js-button mdl-button--icon" for="search-field">
-          <i class="material-icons">search</i>
-        </label>
-        <div class="mdl-textfield__expandable-holder">
-          <input class="mdl-textfield__input" type="text" id="search-field">
+<!-- Navigation -->
+<nav class="navbar navbar-fixed-top z-depth-2 xyz-navbar">
+    <div class="container ">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand waves-effect waves-light" href="#">UoA Karate Club</a>
         </div>
-      </div>
-      <!-- Navigation -->
-      <div class="android-navigation-container">
-        <nav class="android-navigation mdl-navigation">
-          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">Register</a>
-          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">View all members</a>
-          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">Roll Count</a>
-          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="">Fees</a>
-        </nav>
-      </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#products" class="waves-effect waves-light">Members <span class="sr-only">(current)</span></a>
+                </li>
+                <li><a href="#">Attendance</a></li>
+                <li><a href="#">Grading</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+            <div class="navbar-right">
+                <ul class="nav navbar-nav">
+
+                    <li>
+                        <div class="greeting-container">
+                            <span class="xyz-nav-date-time" id="date"></span><br>
+                            <span class="xyz-nav-date-time" id="time"></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row" style="margin-left: 10px">
+                            <div class="col-xs-6">
+                                <div class="blank-circle" style="margin-top: 5px; display: inline-block"></div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="xyz-nav-greeting" style="display: inline-block; margin-top: 16px">
+                                    Lily</i></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container" id="content">
+    <div class="row" style="padding-top:60px">
+        <div class="col-sm-9 col-md-9 main">
+            <h3 class="page-header">Members</h3>
+        </div>
+        <div class="col-sm-3 col-md-3">
+            <btn class="btn btn-primary pull-right" style="margin-top: 40px;" id="addMember">Add Member</btn>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="addMemberModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 style="color:grey;"><span class="glyphicon glyphicon-user"></span> Add Member</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control" id="email" placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label></span> Belt</label>
+                                <input type="text" class="form-control" id="belt" placeholder="Belt">
+                            </div>
+                            <div class="form-group">
+                                <label>Fees</label>
+                                <input type="text" class="form-control" id="fees" placeholder="Fees Outstanding">
+                            </div>
+
+                            <button type="submit" class="btn btn-default pull-left" data-dismiss="modal">Cancel
+                            </button>
+                            <button type="submit" class="btn btn-success pull-right" onclick="submitForm()">Add Member
+                            </button>
+                        </form>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!--Image Card-->
+        <div class="card">
+            <div class="card-content">
+                <div class="col-sm-12" id="table">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div class="col-lg-6 col-lg-offset-3" style="padding-top: 3em;">
-  <table class="datagrid" style="width:100%">
-      <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Belt</th>
-          <th>Attendance</th>
-      </tr>
-      <tr>
-          <td>1</td>
-          <td>Hello World</td>
-          <td>email@email.com</td>
-          <td>Yellow Tab</td>
-          <td>33</td>
-      </tr>
-  </table>
+
+<div class="container" id="content2">
+    <div class="row" style="padding-top:60px">
+        <div class="col-sm-9 col-md-9 main">
+            <h3 class="page-header">Attendance</h3>
+        </div>
+        <div class="col-sm-3 col-md-3">
+            <btn class="btn btn-primary pull-right" style="margin-top: 40px;" id="addMember">Add Member</btn>
+        </div>
+    </div>
+    <div class="row">
+        <!--Image Card-->
+        <div class="card">
+            <div class="card-content">
+                <div class="col-sm-12" id="attendanceTable">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="js/bootstrap.min.js"></script>
-<script src="js/material.js"></script>
-<!--[if lt IE 9]>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-<![endif]-->
-<script src="js/webapp.js"></script>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="assets/js/ie-emulation-modes-warning.js"></script>
+
+<!--Toastr-->
+<script src="toastr/toastr.min.js"></script>
+
+<!--Material Design Lite-->
+<script src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+<!-- Material Design Bootstrap -->
+<script type="text/javascript" src="js/mdb.min.js"></script>
+
+<!-- Custom JS-->
+<script src="js/app.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Path("/sessions")
+@Path("service/sessions")
 public class SessionResource {
     @PersistenceContext
     EntityManager em = PersistenceManager.instance().createEntityManager();
@@ -67,12 +67,14 @@ public class SessionResource {
     public Response createSession(
             Session session) {
 
-        em.getTransaction().begin();
-        em.persist(session);
-        em.getTransaction().commit();
 
 
-        return Response.created(URI.create("sessions/" + sdf.format(session.getDate()))).build();
+            em.getTransaction().begin();
+            em.persist(session);
+            em.getTransaction().commit();
+
+
+        return Response.created(URI.create("service/sessions/" + sdf.format(session.getDate()))).build();
     }
 
     @PUT

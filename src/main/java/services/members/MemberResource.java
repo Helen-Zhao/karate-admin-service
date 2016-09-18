@@ -1,5 +1,6 @@
 package services.members;
 
+import domain.Fees;
 import domain.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Created by helen on 29/08/2016.
  */
-@Path("/members")
+@Path("service/members")
 public class MemberResource {
     @PersistenceContext
     EntityManager em = PersistenceManager.instance().createEntityManager();
@@ -62,7 +63,6 @@ public class MemberResource {
     @Consumes(MediaType.APPLICATION_XML)
     public Response createMember(
             dto.Member dtoMember) {
-        System.out.println("Read member: " + dtoMember);
         Member member = MemberMapper.toDomainModel(dtoMember);
 
         em.getTransaction().begin();
@@ -70,7 +70,27 @@ public class MemberResource {
         em.getTransaction().commit();
 
 
-        return Response.created(URI.create("members/" + member.getId())).build();
+        return Response.created(URI.create("service/members/" + member.getId())).build();
+    }
+
+    @POST
+    @Consumes("text/plain,text/html")
+    public Response createMember(String rawData) {
+
+        String[] dataLines = rawData.split("&");
+
+        Member member = new Member(
+                dataLines[0].split("=")[1],
+                MemberMapper.mapBeltToEnum(dataLines[1].split("=")[1]),
+                new Fees(Double.parseDouble(dataLines[2].split("=")[1]))
+        );
+
+        em.getTransaction().begin();
+        em.persist(member);
+        em.getTransaction().commit();
+
+
+        return Response.created(URI.create("service/members/" + member.getId())).build();
     }
 
     @PUT

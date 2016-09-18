@@ -30,7 +30,7 @@ import static org.junit.Assert.fail;
  * Created by helen on 15/09/2016.
  */
 public class SessionWebServiceTest {
-    private static final String WEB_SERVICE_URI = "http://localhost:8000/sessions";
+    private static final String WEB_SERVICE_URI = "http://localhost:8000/service/sessions";
 
     private static final Logger _logger = LoggerFactory.getLogger(MemberWebServiceTest.class);
 

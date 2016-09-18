@@ -25,7 +25,7 @@ import static org.junit.Assert.fail;
  * Created by helen on 30/08/2016.
  */
 public class MemberWebServiceTest {
-    private static final String WEB_SERVICE_URI = "http://localhost:8000/members";
+    private static final String WEB_SERVICE_URI = "http://localhost:8000/service/members";
 
     private static final Logger _logger = LoggerFactory.getLogger(MemberWebServiceTest.class);
 
