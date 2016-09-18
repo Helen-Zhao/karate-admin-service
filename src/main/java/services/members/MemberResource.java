@@ -2,6 +2,7 @@ package services.members;
 
 import domain.Fees;
 import domain.Member;
+import dto.MemberListWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
@@ -59,10 +60,10 @@ public class MemberResource {
 
 //    @GET
 //    @Produces(MediaType.APPLICATION_XML)
-//    public List<dto.Member> getMembers() {
+//    public List<dto.Member> getQueriedMembers() {
 //        Query query = em.createQuery("SELECT m from Member m");
-//        List<Member> members = query.getResultList();
-//        List<dto.Member> dtoMembers = members.stream()
+//        List<Member> queriedMembers = query.getResultList();
+//        List<dto.Member> dtoMembers = queriedMembers.stream()
 //                .map(e -> MemberMapper.toDto(e))
 //                .collect(Collectors.toList());
 //        return dtoMembers;
@@ -70,7 +71,7 @@ public class MemberResource {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public List<dto.Member> getMembers(@QueryParam("start") int start, @QueryParam("size") int size) {
+    public MemberListWrapper getMembers(@QueryParam("start") int start, @QueryParam("size") int size) {
         Query query = em.createQuery("SELECT m from Member m");
         List<Member> members = query.getResultList();
         List<dto.Member> dtoMembers = members.stream()
@@ -81,7 +82,9 @@ public class MemberResource {
         for (int i = start; i < start + size; i++) {
             wantedMembers.add(dtoMembers.get(i));
         }
-        return wantedMembers;
+
+        MemberListWrapper memberListWrapper = new MemberListWrapper(wantedMembers);
+        return memberListWrapper;
     }
 
     @POST

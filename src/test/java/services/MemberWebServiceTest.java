@@ -2,6 +2,7 @@ package services;
 
 import domain.Belt;
 import domain.Member;
+import dto.MemberListWrapper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,12 +13,12 @@ import services.members.MemberMapper;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -145,11 +146,15 @@ public class MemberWebServiceTest {
 
     @Test
     public void getAllMembers() {
-        GenericType<List<dto.Member>> list = new GenericType<List<dto.Member>>() {};
-        List<dto.Member> members = _client.target(WEB_SERVICE_URI)
+
+        MemberListWrapper memberListWrapper = _client.target(WEB_SERVICE_URI + "?start=0&size=10")
                 .request()
                 .accept(MediaType.APPLICATION_XML)
-                .get(list);
+                .get(dto.MemberListWrapper.class);
+
+        List<dto.Member> members = memberListWrapper.getQueriedMembers();
+        assertTrue(members != null);
+        assertTrue(members.size() > 0);
     }
 
 }
