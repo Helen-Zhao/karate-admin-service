@@ -155,6 +155,7 @@ public class AUStudentWebServiceTest {
         dto.AUStudent updatedDtostudentFromService = _client.target(WEB_SERVICE_URI + "/" + studentFromService.getId())
                 .request()
                 .accept(MediaType.APPLICATION_XML)
+                .cookie("cache", "ignore-cache")
                 .get(dto.AUStudent.class);
 
         AUStudent updatedStudentFromService = AUStudentMapper.toDomainModel(updatedDtostudentFromService);

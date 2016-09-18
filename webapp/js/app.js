@@ -5,7 +5,7 @@ function loadMemberList() {
       populateTable(this);
     }
   };
-  var url = "http://localhost:8000/service/members";
+  var url = "http://localhost:8000/service/members?start=0&size=10";
   xhttp.open("GET", url, true);
   xhttp.send();
 }
@@ -26,7 +26,7 @@ function populateTable(xml) {
   var table = '<table class="table-striped"><tr><th>Email</th><th>Belt</th><th>Outstanding Fees</th></tr>';
   console.log(xmlDoc);
   var x = xmlDoc.getElementsByTagName("member");
-  for (i = 0; i <x.length; i++) {
+  for (i = x.length - 1; i >= 0; i--) {
     table += "<tr><td>" +
         x[i].getElementsByTagName("email")[0].childNodes[0].nodeValue +
         "</td><td>" +
@@ -42,16 +42,17 @@ function submitForm() {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.status == 201) {
-      $("#addMemberModal").hide();
+      $("#addMemberModal").modal('hide');
+      loadMemberList();
       toastr.info("Success", "Member created successfully");
-    } else {
+    } else if (this.status < 550 && this.status > 250){
       toastr.error("Error", "Issue creating member. " + this.responseText);
     }
 
   };
   var url = "http://localhost:8000/service/members";
   xhttp.open("POST", url, true);
-  var info = "email=" + document.getElementById("email").value + "&belt=" + document.getElementById("belt").value+ "&fees=" + document.getElementById("fees").value;
+  var info = "email=" + document.getElementById("email").value + "&belt=" + encodeURI(selectedText)+ "&fees=" + document.getElementById("fees").value;
   console.log(info);
   xhttp.send(info);
 }
@@ -115,3 +116,8 @@ toastr.options = {
 }
 
 window.onload = loadFunctions();
+
+var selectedText;
+$('#belt').change(function () {
+  selectedText = $(this).find("option:selected").text();
+});

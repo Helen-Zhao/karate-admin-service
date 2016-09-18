@@ -69,13 +69,19 @@ public class GradingResource {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public Response createGrading(
-            Grading Grading) {
+            Grading grading) {
+        Grading existingGrading = em.find(Grading.class, grading.getDate());
 
-        em.getTransaction().begin();
-        em.persist(Grading);
-        em.getTransaction().commit();
+        if (existingGrading == null) {
+            em.getTransaction().begin();
+            em.persist(grading);
+            em.getTransaction().commit();
+        } else {
+            em.merge(grading);
+        }
 
-        return Response.created(URI.create("service/gradings/" + sdf.format(Grading.getDate()))).build();
+
+        return Response.created(URI.create("service/gradings/" + sdf.format(grading.getDate()))).build();
     }
 
     @PUT

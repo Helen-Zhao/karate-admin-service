@@ -31,35 +31,35 @@ public class MemberMapper {
 
     public static Belt mapBeltToEnum(String beltString) {
         switch (beltString) {
-            case "black_1_dan":
+            case "Black First Dan":
                 return Belt.BLACK_FIRST_DAN;
-            case "black_2_dan":
+            case "Black Second Dan":
                 return Belt.BLACK_SECOND_DAN;
-            case "black_3_dan":
+            case "Black Third Dan":
                 return Belt.BLACK_THIRD_DAN;
-            case "black_4_dan":
+            case "Black Fourth Dan":
                 return Belt.BLACK_FOURTH_DAN;
-            case "brown_1_tab":
+            case "Brown One Tab":
                 return Belt.BROWN_ONE_TAB;
-            case "brown_2_tab":
+            case "Brown Two Tab":
                 return Belt.BROWN_TWO_TAB;
-            case "brown":
+            case "Brown":
                 return Belt.BROWN;
-            case "green_tab":
+            case "Green Tab":
                 return Belt.GREEN_TAB;
-            case "green":
+            case "Green":
                 return Belt.GREEN;
-            case "yellow_tab":
+            case "Yellow Tab":
                 return Belt.YELLOW_TAB;
-            case "yellow":
+            case "Yellow":
                 return Belt.YELLOW;
-            case "blue_tab":
+            case "Blue Tab":
                 return Belt.BLUE_TAB;
-            case "blue":
+            case "Blue":
                 return Belt.BLUE;
-            case "white_tab":
+            case "White Tab":
                 return Belt.WHITE_TAB;
-            case "white":
+            case "White":
                 return Belt.WHITE;
         }
 
@@ -69,35 +69,35 @@ public class MemberMapper {
     static String mapBeltToString(Belt belt) {
         switch (belt) {
             case BLACK_FIRST_DAN:
-                return "black_1_dan";
+                return "Black First Dan";
             case BLACK_SECOND_DAN:
-                return "black_2_dan";
+                return "Black Second Dan";
             case BLACK_THIRD_DAN:
-                return "black_3_dan";
+                return "Black Third Dan";
             case BLACK_FOURTH_DAN:
-                return "black_4_dan";
+                return "Black Fourth Dan";
             case BROWN_ONE_TAB:
-                return "brown_1_tab";
+                return "Brown One Tab";
             case BROWN_TWO_TAB:
-                return "brown_2_tab";
+                return "Brown Two Tab";
             case BROWN:
-                return "brown";
+                return "Brown";
             case GREEN_TAB:
-                return "green_tab";
+                return "Green Tab";
             case GREEN:
-                return "green";
+                return "Green";
             case YELLOW_TAB:
-                return "yellow_tab";
+                return "Yellow Tab";
             case YELLOW:
-                return "yellow";
+                return "Yellow";
             case BLUE_TAB:
-                return "blue_tab";
+                return "Blue Tab";
             case BLUE:
-                return "blue";
+                return "Blue";
             case WHITE_TAB:
-                return "white_tab";
+                return "White Tab";
             case WHITE:
-                return "white";
+                return "White";
         }
 
         return null;

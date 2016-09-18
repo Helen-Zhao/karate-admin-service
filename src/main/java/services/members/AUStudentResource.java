@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
@@ -33,9 +34,14 @@ public class AUStudentResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_XML)
-    public dto.AUStudent getAUStudent(@PathParam("id") long id) {
+    public dto.AUStudent getAUStudent(@PathParam("id") long id, @CookieParam("cache") NewCookie cookie) {
+        boolean ignoreCache = false;
+        if (cookie != null && cookie.getValue() != null) {
+            ignoreCache = cookie.getValue().equals("ignore-cache");
+        }
+
         AUStudent auStudent;
-        if (_AUStudentDB.containsKey(id)) {
+        if (_AUStudentDB.containsKey(id)&& !ignoreCache) {
             auStudent = _AUStudentDB.get(id);
         } else {
             auStudent = em.find(AUStudent.class, id);

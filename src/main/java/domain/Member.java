@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "MEMBERS")
 @Inheritance(strategy = InheritanceType.JOINED)
-
 public class Member implements Serializable {
 
     @Id

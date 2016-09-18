@@ -11,8 +11,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,9 +35,16 @@ public class MemberResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_XML)
-    public dto.Member getMember(@PathParam("id") long id) {
+    public dto.Member getMember(@PathParam("id") long id, @CookieParam("cache")
+            NewCookie cookie) {
+
+        boolean ignoreCache = false;
+        if (cookie != null && cookie.getValue() != null) {
+            ignoreCache = cookie.getValue().equals("ignore-cache");
+        }
+
         Member member;
-        if (_memberDB.containsKey(id)) {
+        if (_memberDB.containsKey(id) && !ignoreCache) {
             member = _memberDB.get(id);
         } else {
             member = em.find(Member.class, id);
@@ -48,15 +57,31 @@ public class MemberResource {
         return MemberMapper.toDto(member);
     }
 
+//    @GET
+//    @Produces(MediaType.APPLICATION_XML)
+//    public List<dto.Member> getMembers() {
+//        Query query = em.createQuery("SELECT m from Member m");
+//        List<Member> members = query.getResultList();
+//        List<dto.Member> dtoMembers = members.stream()
+//                .map(e -> MemberMapper.toDto(e))
+//                .collect(Collectors.toList());
+//        return dtoMembers;
+//    }
+
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public List<dto.Member> getMembers() {
+    public List<dto.Member> getMembers(@QueryParam("start") int start, @QueryParam("size") int size) {
         Query query = em.createQuery("SELECT m from Member m");
         List<Member> members = query.getResultList();
         List<dto.Member> dtoMembers = members.stream()
                 .map(e -> MemberMapper.toDto(e))
                 .collect(Collectors.toList());
-        return dtoMembers;
+
+        List<dto.Member> wantedMembers = new ArrayList<>();
+        for (int i = start; i < start + size; i++) {
+            wantedMembers.add(dtoMembers.get(i));
+        }
+        return wantedMembers;
     }
 
     @POST

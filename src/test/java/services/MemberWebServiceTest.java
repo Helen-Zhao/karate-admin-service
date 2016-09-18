@@ -134,6 +134,7 @@ public class MemberWebServiceTest {
         dto.Member updatedDtoMemberFromService = _client.target(WEB_SERVICE_URI + "/" + memberFromService.getId())
                 .request()
                 .accept(MediaType.APPLICATION_XML)
+                .cookie("cache", "ignore-cache")
                 .get(dto.Member.class);
 
         Member updatedMemberFromService = MemberMapper.toDomainModel(updatedDtoMemberFromService);
