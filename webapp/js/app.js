@@ -2,13 +2,13 @@ var selectedText;
 var urlNext;
 var urlPrev;
 var size = 10;
-
+var xmlDoc;
 
 function loadInitialMemberList() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var xmlDoc = this.responseXML;
+            xmlDoc = this.responseXML;
             console.log(xmlDoc);
             populateTable(xmlDoc.getElementsByTagName("memberListWrapper")[0]);
             setNextPrev(xmlDoc);
@@ -69,6 +69,7 @@ function swapPage() {
 }
 
 function populateTable(xmlDoc) {
+    $('#loading').hide();
     var table = '<table class="table-striped"><tr><th>Email</th><th>Belt</th><th>Outstanding Fees</th></tr>';
     console.log(xmlDoc);
     var x = xmlDoc.getElementsByTagName("queriedMembers")[0].getElementsByTagName("queriedMember");
@@ -166,5 +167,10 @@ window.onload = loadFunctions();
 $('#belt').change(function () {
     selectedText = $(this).find("option:selected").text();
 });
+
+$('#loading').show(typeof xmlDoc == 'undefined');
+
+$('#previousBtn').hide();
+$('#nextBtn').hide();
 
 
