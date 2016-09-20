@@ -240,16 +240,16 @@ public class MemberWebServiceTest {
                 .async()
                 .get();
 
-        while (!responseFuture.isDone()) {
-            try {
-                Response responseNow = responseFuture.get();
-                Invoice invoice = responseNow.readEntity(Invoice.class);
-                assertEquals(dtoMember, invoice.getMember());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            Response responseNow = responseFuture.get();
+            Invoice invoice = responseNow.readEntity(Invoice.class);
+            assertEquals(member.getEmail(), invoice.getMember().getEmail());
+            assertEquals(member.getBelt(), invoice.getMember().getBelt());
 
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
     }
 
