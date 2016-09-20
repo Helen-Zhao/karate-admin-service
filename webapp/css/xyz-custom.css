@@ -1,0 +1,132 @@
+/* Navbar color: #289D9D; */
+/*Bootstrap And Material Design Overrides*/
+.navbar {
+  background-color: #289D9D;
+}
+
+.navbar-fixed-top {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.navbar .navbar-brand {
+  font-size: xx-large;
+}
+
+.navbar .navbar-nav > li > a {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+body {
+  background-color: #ECECEC;
+}
+
+.card .card-title {
+  color: black;
+  background-color: white;
+}
+
+.light-grey {
+  color: #B5B5B5;
+}
+
+.dropdown-menu {
+  background-color: #289D9D;
+}
+
+.dropdown-menu li > a {
+  color: white;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.caption {
+  text-align: center;
+}
+
+.p {
+  font-size: 1.25em;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.mdl-switch {
+  width: auto;
+  float: right;
+  margin-right: 15px;
+
+}
+
+.switch-container {
+  padding-bottom: 5px;
+}
+
+.slider-container {
+  padding-bottom: 10px;
+}
+
+.plus {
+  font-size: 150px;
+  text-align: center;
+  font-weight: 300;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus {
+  background-color: #B5B5B5;
+  background: #B5B5B5;
+  color: white;
+}
+
+.btn-primary{
+  background-color: #289D9D;
+  background: #289D9D;
+  color: white;
+}
+
+.btn-primary:active, .btn-primary:hover, .btn-primary:focus {
+  background-color: #5aa6a6;
+  color: white;
+}
+
+.btn-white:active, .btn-white:focus, .btn-white:hover   {
+  background-color: white;
+}
+
+.xyz-nav-greeting {
+  color: white;
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.xyz-nav-date-time {
+  color: white;
+  font-size: 14px;
+  line-height: 0;
+  font-weight: 300;
+}
+
+.greeting-container {
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.blank-circle {
+  border-radius: 50%;
+	width: 50px;
+	height: 50px;
+  background-color: #B5B5B5;
+}
+
+/*Overriding Toastr colors*/
+.toast-success {
+  background-color: #289D9D;
+}
+
+/*Overriding material label font-weight for consistency*/
+label {
+  font-weight: 400;
+}

@@ -140,7 +140,7 @@
                     <httpConnector>
                         <port>${servlet.container.port}</port>
                     </httpConnector>
-                    <webAppSourceDirectory>webapp/  </webAppSourceDirectory>
+                    <webAppSourceDirectory>webapp/</webAppSourceDirectory>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <stopKey>foo</stopKey>
                     <stopPort>9999</stopPort>
@@ -155,7 +155,6 @@
                         </goals>
                         <configuration>
                             <scanIntervalSeconds>0</scanIntervalSeconds>
-                            <daemon>true</daemon>
                         </configuration>
                     </execution>
                     <execution>
@@ -169,5 +168,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

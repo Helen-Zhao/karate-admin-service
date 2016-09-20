@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 
 @Embeddable
-public class Fees implements Serializable{
+public class Fees implements Serializable {
 
     private double outstandingBalance;
 
@@ -16,6 +16,10 @@ public class Fees implements Serializable{
         outstandingBalance = 0.0d;
     }
 
+    public Fees(double outstandingBalance) {
+        this.outstandingBalance = outstandingBalance;
+    }
+    
     void chargeFees(double toCharge) {
         outstandingBalance += toCharge;
     }

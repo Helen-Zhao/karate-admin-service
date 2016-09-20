@@ -1,9 +1,11 @@
 package services.sessions;
 
+import domain.Member;
 import domain.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
+import services.members.MemberMapper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +20,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Path("/sessions")
+@Path("service/sessions")
 public class SessionResource {
     @PersistenceContext
     EntityManager em = PersistenceManager.instance().createEntityManager();
@@ -31,7 +33,7 @@ public class SessionResource {
     @GET
     @Path("/{date}")
     @Produces(MediaType.APPLICATION_XML)
-    public Session getMember(@PathParam("date") String strDate, @CookieParam("cache")
+    public Session getSession(@PathParam("date") String strDate, @CookieParam("cache")
             NewCookie cookie) {
 
         //Determine if date param is valid
@@ -53,11 +55,12 @@ public class SessionResource {
             session = sessionDB.get(date);
         } else {
             session = em.find(Session.class, date);
-            sessionDB.put(session.getDate(), session);
         }
 
         if (session == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            sessionDB.put(session.getDate(), session);
         }
         return session;
     }
@@ -67,12 +70,18 @@ public class SessionResource {
     public Response createSession(
             Session session) {
 
-        em.getTransaction().begin();
-        em.persist(session);
-        em.getTransaction().commit();
+        Session existingSession = em.find(Session.class, session.getDate());
 
+        if (existingSession == null) {
+            em.getTransaction().begin();
+            em.persist(session);
+            em.getTransaction().commit();
+        } else {
+            em.merge(session);
+            sessionDB.remove(session.getDate());
+        }
 
-        return Response.created(URI.create("sessions/" + sdf.format(session.getDate()))).build();
+        return Response.created(URI.create("service/sessions/" + sdf.format(session.getDate()))).build();
     }
 
     @PUT
@@ -82,10 +91,37 @@ public class SessionResource {
             Session session) {
         em.merge(session);
 
+        sessionDB.remove(session.getDate());
+
         return Response.noContent().build();
 
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.
 
+    }
+
+    @DELETE
+    @Path("/{date}")
+    public Response deleteSession(@PathParam("date") String strDate) {
+        Session session;
+        Date date;
+        try {
+            date = sdf.parse(strDate);
+            session = em.find(Session.class, date);
+        } catch (ParseException pe) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        if(session == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            sessionDB.remove(session.getDate());
+        }
+
+        em.getTransaction().begin();
+        em.remove(session);
+        em.getTransaction().commit();
+
+        return Response.noContent().build();
     }
 }

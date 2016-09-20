@@ -1,6 +1,7 @@
 package services.members;
 
 import domain.AUStudent;
+import domain.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * Created by helen on 29/08/2016.
  */
-@Path("/students")
+@Path("service/students")
 public class AUStudentResource {
     @PersistenceContext
     EntityManager em = PersistenceManager.instance().createEntityManager();
@@ -32,17 +34,23 @@ public class AUStudentResource {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_XML)
-    public dto.AUStudent getAUStudent(@PathParam("id") long id) {
+    public dto.AUStudent getAUStudent(@PathParam("id") long id, @CookieParam("cache") NewCookie cookie) {
+        boolean ignoreCache = false;
+        if (cookie != null && cookie.getValue() != null) {
+            ignoreCache = cookie.getValue().equals("ignore-cache");
+        }
+
         AUStudent auStudent;
-        if (_AUStudentDB.containsKey(id)) {
+        if (_AUStudentDB.containsKey(id)&& !ignoreCache) {
             auStudent = _AUStudentDB.get(id);
         } else {
             auStudent = em.find(AUStudent.class, id);
-            _AUStudentDB.put(auStudent.getId(), auStudent);
         }
 
         if (auStudent == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            _AUStudentDB.put(auStudent.getId(), auStudent);
         }
         return AUStudentMapper.toDto(auStudent);
     }
@@ -62,15 +70,13 @@ public class AUStudentResource {
     @Consumes(MediaType.APPLICATION_XML)
     public Response createAUStudent(
             dto.AUStudent dtoAUStudent) {
-        System.out.println("Read AUStudent: " + dtoAUStudent);
         AUStudent AUStudent = AUStudentMapper.toDomainModel(dtoAUStudent);
 
         em.getTransaction().begin();
         em.persist(AUStudent);
         em.getTransaction().commit();
 
-
-        return Response.created(URI.create("students/" + AUStudent.getId())).build();
+        return Response.created(URI.create("service/students/" + AUStudent.getId())).build();
     }
 
     @PUT
@@ -85,11 +91,32 @@ public class AUStudentResource {
         AUStudent AUStudent = AUStudentMapper.toDomainModel(dtoAUStudent);
         em.merge(AUStudent);
 
+        _AUStudentDB.remove(dtoAUStudent.getId());
+
         return Response.noContent().build();
 
         // JAX-RS will add the default response code (204 No Content) to the
         // HTTP response message.
 
     }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteStudent(@PathParam("id") long id) {
+        AUStudent auStudent = em.find(AUStudent.class, id);
+
+        if(auStudent == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
+        em.getTransaction().begin();
+        em.remove(auStudent);
+        em.getTransaction().commit();
+
+        _AUStudentDB.remove(id);
+
+        return Response.noContent().build();
+    }
+
 
 }

@@ -5,7 +5,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -15,20 +14,23 @@ import java.util.List;
 
 @Entity
 @XmlRootElement
+@XmlSeeAlso({Grading.class})
 @XmlType(name = "session")
 @XmlAccessorType(XmlAccessType.FIELD)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Session implements Serializable{
 
     @Id
     @XmlAttribute
-    private Date date;
+    protected Date date;
 
-    @XmlElement
+    @XmlElementWrapper(name = "attendees")
+    @XmlElement(name = "attendee")
     @OneToMany(cascade = CascadeType.PERSIST)
-    private List<Member> attendees;
+    protected List<Member> attendees;
 
     public Session() {
-        this.date = DateUtils.round(new Date(), Calendar.DAY_OF_MONTH);
+        this.date = DateUtils.ceiling(new Date(), Calendar.DAY_OF_MONTH);
         this.attendees = new ArrayList<>();
     }
 

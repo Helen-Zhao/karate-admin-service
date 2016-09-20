@@ -23,14 +23,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by helen on 15/09/2016.
  */
 public class SessionWebServiceTest {
-    private static final String WEB_SERVICE_URI = "http://localhost:8000/sessions";
+    private static final String WEB_SERVICE_URI = "http://localhost:8000/service/sessions";
 
     private static final Logger _logger = LoggerFactory.getLogger(MemberWebServiceTest.class);
 
@@ -84,13 +83,13 @@ public class SessionWebServiceTest {
                 .get(Session.class);
 
         assertEquals(session.getDate(), sessionFromService.getDate());
-        assertEquals(session.getAttendees().get(0).getEmail(), sessionFromService.getAttendees().get(0).getEmail());
+        assertTrue(sessionFromService.getAttendees().size() > 0);
     }
 
     @Test
     public void testGetSessionCascadeStudent() {
 
-        Date today = DateUtils.round(new Date(), Calendar.DAY_OF_MONTH);
+        Date today = DateUtils.ceiling(new Date(), Calendar.DAY_OF_MONTH);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy");
         Session session = _client.
                 target(WEB_SERVICE_URI + "/" + sdf.format(today))

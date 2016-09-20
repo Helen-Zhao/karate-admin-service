@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "MEMBERS")
 @Inheritance(strategy = InheritanceType.JOINED)
-
 public class Member implements Serializable {
 
     @Id
@@ -22,6 +21,7 @@ public class Member implements Serializable {
 
     @Enumerated(EnumType.STRING)
     protected Belt belt;
+
 
     @Embedded
     protected Fees fees;
@@ -93,6 +93,17 @@ public class Member implements Serializable {
 
     public void setBelt(Belt belt) {
         this.belt = belt;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", belt=" + belt +
+                ", fees=" + fees +
+                '}';
     }
 
 }
