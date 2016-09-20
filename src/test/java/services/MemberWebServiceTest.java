@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.members.MemberMapper;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -155,6 +156,55 @@ public class MemberWebServiceTest {
         List<dto.Member> members = memberListWrapper.getQueriedMembers();
         assertTrue(members != null);
         assertTrue(members.size() > 0);
+    }
+
+    @Test (expected = WebApplicationException.class)
+    public void deleteMember() {
+        Member member = new Member(
+                "goingToBeDeleted@something.com",
+                Belt.BLACK_FOURTH_DAN
+        );
+
+        dto.Member dtoMember = MemberMapper.toDto(member);
+
+        Response response = _client.
+                target(WEB_SERVICE_URI)
+                .request()
+                .post(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
+
+        if (response.getStatus() != 201) {
+            fail("Failed to create new Member");
+        }
+
+        String location = response.getLocation().toString();
+        response.close();
+
+        dto.Member dtoMemberFromService = _client.target(location)
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(dto.Member.class);
+
+
+
+        /**
+         * Member from service now exists and we can delete it with the ID we got back
+         */
+
+        Response deleteResponse = _client
+                .target(WEB_SERVICE_URI + "/" + dtoMemberFromService.getId())
+                .request()
+                .delete();
+
+        if (deleteResponse.getStatus() != 204) {
+            fail("Failed to delete Member");
+        }
+
+        dto.Member shouldntExist = _client.target(WEB_SERVICE_URI + "/" + dtoMemberFromService.getId())
+                .request()
+                .get(dto.Member.class);
+
+        _logger.info(shouldntExist.getEmail());
+
     }
 
 }

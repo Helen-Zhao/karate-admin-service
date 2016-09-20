@@ -152,13 +152,13 @@ public class AUStudentWebServiceTest {
 
         response.close();
 
-        dto.AUStudent updatedDtostudentFromService = _client.target(WEB_SERVICE_URI + "/" + studentFromService.getId())
+        dto.AUStudent updatedDtoStudentFromService = _client.target(WEB_SERVICE_URI + "/" + studentFromService.getId())
                 .request()
                 .accept(MediaType.APPLICATION_XML)
                 .cookie("cache", "ignore-cache")
                 .get(dto.AUStudent.class);
 
-        AUStudent updatedStudentFromService = AUStudentMapper.toDomainModel(updatedDtostudentFromService);
+        AUStudent updatedStudentFromService = AUStudentMapper.toDomainModel(updatedDtoStudentFromService);
 
 
         assertEquals(studentFromService.getBelt(), updatedStudentFromService.getBelt());
@@ -166,7 +166,7 @@ public class AUStudentWebServiceTest {
     }
 
     @Test
-    public void getAllMembers() {
+    public void getAllStudents() {
         javax.ws.rs.core.GenericType<List<dto.AUStudent>> list = new javax.ws.rs.core.GenericType<List<dto.AUStudent>>() {};
         List<dto.AUStudent> students = _client.target(WEB_SERVICE_URI)
                 .request()
@@ -176,5 +176,6 @@ public class AUStudentWebServiceTest {
         _logger.info("" + students.size());
         assertTrue(students != null && students.size() > 0);
     }
+
 
 }

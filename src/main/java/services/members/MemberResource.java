@@ -49,11 +49,12 @@ public class MemberResource {
             member = _memberDB.get(id);
         } else {
             member = em.find(Member.class, id);
-            _memberDB.put(member.getId(), member);
         }
 
         if (member == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            _memberDB.put(member.getId(), member);
         }
         return MemberMapper.toDto(member);
     }
@@ -174,6 +175,8 @@ public class MemberResource {
         Member member = MemberMapper.toDomainModel(dtoMember);
         em.merge(member);
 
+        _memberDB.remove(dtoMember.getId());
+
         return Response.noContent().build();
 
         // JAX-RS will add the default response code (204 No Content) to the
@@ -182,13 +185,21 @@ public class MemberResource {
     }
 
     @DELETE
-    @Path("/{id")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void deleteMember(dto.Member dtoMember) {
-        Member member = MemberMapper.toDomainModel(dtoMember);
+    @Path("/{id}")
+    public Response deleteMember(@PathParam("id") long id) {
+        Member member = em.find(Member.class, id);
+
+        if(member == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
         em.getTransaction().begin();
         em.remove(member);
         em.getTransaction().commit();
+
+        _memberDB.remove(id);
+
+        return Response.noContent().build();
     }
 
 }

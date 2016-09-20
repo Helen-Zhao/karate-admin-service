@@ -1,7 +1,6 @@
 package services.sessions;
 
 import domain.Grading;
-import domain.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
@@ -47,15 +46,12 @@ public class GradingResource {
         if (cookie != null && cookie.getValue() != null) {
             ignoreCache = cookie.getValue().equals("ignore-cache");
         }
-        _logger.info("" + date + strDate);
         Grading grading;
         //Determine if Grading exists in cache
         if (gradingDB.containsKey(date) && !ignoreCache) {
-            _logger.info("wrong if");
             grading = gradingDB.get(date);
         } else {
             grading = em.find(Grading.class, date);
-            _logger.info("in find");
         }
 
         if (grading == null) {
@@ -78,6 +74,7 @@ public class GradingResource {
             em.getTransaction().commit();
         } else {
             em.merge(grading);
+            gradingDB.remove(grading.getDate());
         }
 
 
@@ -88,8 +85,10 @@ public class GradingResource {
     @Path("/{date}")
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateGrading(
-            Grading Grading) {
-        em.merge(Grading);
+            Grading grading) {
+        em.merge(grading);
+
+        gradingDB.remove(grading.getDate());
 
         return Response.noContent().build();
 
@@ -100,11 +99,27 @@ public class GradingResource {
 
 
     @DELETE
-    @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void deleteGrading(Grading grading) {
+    @Path("/{date}")
+    public Response deleteGrading(@PathParam("date") String strDate) {
+        Grading grading;
+        Date date;
+        try {
+            date = sdf.parse(strDate);
+            grading = em.find(Grading.class, date);
+        } catch (ParseException pe) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        if(grading == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            gradingDB.remove(grading.getDate());
+        }
+
         em.getTransaction().begin();
         em.remove(grading);
         em.getTransaction().commit();
+
+        return Response.noContent().build();
     }
 }

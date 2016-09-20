@@ -1,6 +1,5 @@
 package domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 

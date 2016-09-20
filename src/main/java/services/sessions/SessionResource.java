@@ -78,6 +78,7 @@ public class SessionResource {
             em.getTransaction().commit();
         } else {
             em.merge(session);
+            sessionDB.remove(session.getDate());
         }
 
         return Response.created(URI.create("service/sessions/" + sdf.format(session.getDate()))).build();
@@ -90,6 +91,8 @@ public class SessionResource {
             Session session) {
         em.merge(session);
 
+        sessionDB.remove(session.getDate());
+
         return Response.noContent().build();
 
         // JAX-RS will add the default response code (204 No Content) to the
@@ -98,11 +101,27 @@ public class SessionResource {
     }
 
     @DELETE
-    @Path("/{id")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void deleteSession(Session session) {
+    @Path("/{date}")
+    public Response deleteSession(@PathParam("date") String strDate) {
+        Session session;
+        Date date;
+        try {
+            date = sdf.parse(strDate);
+            session = em.find(Session.class, date);
+        } catch (ParseException pe) {
+            throw new WebApplicationException(Response.Status.BAD_REQUEST);
+        }
+
+        if(session == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            sessionDB.remove(session.getDate());
+        }
+
         em.getTransaction().begin();
         em.remove(session);
         em.getTransaction().commit();
+
+        return Response.noContent().build();
     }
 }

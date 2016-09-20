@@ -10,8 +10,12 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:~/hello;mv_store=false;"/>
             <property name="javax.persistence.jdbc.user" value="admin"/>
             <property name="javax.persistence.jdbc.password" value=""/>
-            <property name="javax.persistence.schema-generation.database.action" value="none"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+
+            <!--Use these two to persist rows from tests in database for the AJAX client-->
+            <!--<property name="javax.persistence.schema-generation.database.action" value="none"/>-->
+            <!--<property name="hibernate.hbm2ddl.auto" value="update"/>-->
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.use_sql_comments" value="true"/>

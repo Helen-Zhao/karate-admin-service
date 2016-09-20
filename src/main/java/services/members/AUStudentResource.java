@@ -45,11 +45,12 @@ public class AUStudentResource {
             auStudent = _AUStudentDB.get(id);
         } else {
             auStudent = em.find(AUStudent.class, id);
-            _AUStudentDB.put(auStudent.getId(), auStudent);
         }
 
         if (auStudent == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
+        } else {
+            _AUStudentDB.put(auStudent.getId(), auStudent);
         }
         return AUStudentMapper.toDto(auStudent);
     }
@@ -69,13 +70,11 @@ public class AUStudentResource {
     @Consumes(MediaType.APPLICATION_XML)
     public Response createAUStudent(
             dto.AUStudent dtoAUStudent) {
-        System.out.println("Read AUStudent: " + dtoAUStudent);
         AUStudent AUStudent = AUStudentMapper.toDomainModel(dtoAUStudent);
 
         em.getTransaction().begin();
         em.persist(AUStudent);
         em.getTransaction().commit();
-
 
         return Response.created(URI.create("service/students/" + AUStudent.getId())).build();
     }
@@ -92,6 +91,8 @@ public class AUStudentResource {
         AUStudent AUStudent = AUStudentMapper.toDomainModel(dtoAUStudent);
         em.merge(AUStudent);
 
+        _AUStudentDB.remove(dtoAUStudent.getId());
+
         return Response.noContent().build();
 
         // JAX-RS will add the default response code (204 No Content) to the
@@ -100,13 +101,22 @@ public class AUStudentResource {
     }
 
     @DELETE
-    @Path("/{id")
-    @Consumes(MediaType.APPLICATION_XML)
-    public void deleteStudent(dto.AUStudent dtoAuStudent) {
-        AUStudent student = AUStudentMapper.toDomainModel(dtoAuStudent);
+    @Path("/{id}")
+    public Response deleteStudent(@PathParam("id") long id) {
+        AUStudent auStudent = em.find(AUStudent.class, id);
+
+        if(auStudent == null) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+
         em.getTransaction().begin();
-        em.remove(student);
+        em.remove(auStudent);
         em.getTransaction().commit();
+
+        _AUStudentDB.remove(id);
+
+        return Response.noContent().build();
     }
+
 
 }
