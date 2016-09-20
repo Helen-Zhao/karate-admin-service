@@ -74,16 +74,58 @@ public class MemberResource {
     public MemberListWrapper getMembers(@QueryParam("start") int start, @QueryParam("size") int size) {
         Query query = em.createQuery("SELECT m from Member m");
         List<Member> members = query.getResultList();
+
         List<dto.Member> dtoMembers = members.stream()
                 .map(e -> MemberMapper.toDto(e))
                 .collect(Collectors.toList());
 
-        List<dto.Member> wantedMembers = new ArrayList<>();
-        for (int i = start; i < start + size; i++) {
-            wantedMembers.add(dtoMembers.get(i));
+        String urlNext;
+        String urlPrev;
+        if (dtoMembers.size() <= 10) {
+            urlNext = "";
+            urlPrev = "";
+            return new MemberListWrapper(dtoMembers, urlNext, urlPrev);
         }
 
-        MemberListWrapper memberListWrapper = new MemberListWrapper(wantedMembers);
+        /**
+         * Determine next URL start and size
+         */
+        int newStartForNext = start + size;
+        if (newStartForNext >= dtoMembers.size()) {
+            urlNext = "";
+        } else {
+            urlNext = "http://localhost:8000/service/members?start=" + newStartForNext + "&size=" + size;
+        }
+
+        /**
+         * Determine previous URL start (may be negative)
+         */
+        int newStartForPrev = start - size;
+
+        if (start <= 0) {
+            urlPrev = "";
+        } else {
+            urlPrev = "http://localhost:8000/service/members?start=" + newStartForPrev + "&size=" + size;
+        }
+
+        int end = newStartForNext;
+        if (start < 0) {
+            end = start + 10;
+            start = 0;
+        }
+
+        _logger.info("newStartForNext=" + newStartForNext, " dtoMembersSize=" + dtoMembers.size());
+        if (newStartForNext > dtoMembers.size() && newStartForNext - dtoMembers.size() > 0) {
+            end = dtoMembers.size();
+        }
+
+        _logger.info("start=" + start +  " end=" + end);
+
+        List<dto.Member> wantedMembers = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            wantedMembers.add(dtoMembers.get(i));
+        }
+        MemberListWrapper memberListWrapper = new MemberListWrapper(wantedMembers, urlNext, urlPrev);
         return memberListWrapper;
     }
 
@@ -103,14 +145,13 @@ public class MemberResource {
 
     @POST
     @Consumes("text/plain,text/html")
-    public Response createMember(String rawData) {
+    public Response createMember(@QueryParam("email") String email, @QueryParam("belt") String belt, @QueryParam("fees") double fees) {
 
-        String[] dataLines = rawData.split("&");
 
         Member member = new Member(
-                dataLines[0].split("=")[1],
-                MemberMapper.mapBeltToEnum(dataLines[1].split("=")[1]),
-                new Fees(Double.parseDouble(dataLines[2].split("=")[1]))
+                email,
+                MemberMapper.mapBeltToEnum(belt),
+                new Fees(fees)
         );
 
         em.getTransaction().begin();

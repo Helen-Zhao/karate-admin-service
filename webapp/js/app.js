@@ -1,76 +1,64 @@
 var selectedText;
-var memberListSize = 100;
-var paginationCounter = 0;
-var endOfListReached = false;
-var beginningOfListReached = true;
+var urlNext;
+var urlPrev;
 var size = 10;
 
+
+function loadInitialMemberList() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var xmlDoc = this.responseXML;
+            console.log(xmlDoc);
+            populateTable(xmlDoc.getElementsByTagName("memberListWrapper")[0]);
+            setNextPrev(xmlDoc);
+
+        }
+    };
+    var url = "http://localhost:8000/service/members?start=0&size=10";
+    xhttp.open("GET", url, true);
+    xhttp.send();
+}
 function loadMemberList(next, previous) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var xmlDoc = this.responseXML;
-            memberListSize = xmlDoc.getElementsByTagName("memberListWrapper").nodeValue;
+            console.log(xmlDoc);
             populateTable(xmlDoc.getElementsByTagName("memberListWrapper")[0]);
+            setNextPrev(xmlDoc);
         }
-    };
+    }
 
     if (next) {
-        loadNextMemberPage(xhttp);
-    }
-
-    if (previous) {
-        loadPreviousMemberPage(xhttp);
-    }
-}
-function loadPreviousMemberPage(xhttp) {
-    size = 10;
-    updateNextPrevious(false);
-    var url = "http://localhost:8000/service/members?start=" + paginationCounter + "&size=" + size;
-    console.log(url);
-    paginationCounter =- 10;
-    xhttp.open("GET", url, true);
-    xhttp.send();
-}
-
-function loadNextMemberPage(xhttp) {
-    size = 10;
-    updateNextPrevious(true);
-    if (!endOfListReached) {
-        var url = "http://localhost:8000/service/members?start=" + paginationCounter + "&size=" + size;
-        console.log(url);
-        paginationCounter += 10;
-        xhttp.open("GET", url, true);
+        xhttp.open("GET", urlNext, true);
         xhttp.send();
     }
 
+    if (previous) {
+        xhttp.open("GET", urlPrev, true);
+        xhttp.send();
+    }
 }
 
-function updateNextPrevious(isNext) {
-    if ((paginationCounter + size) > memberListSize) {
-        if (isNext) {
-            size = memberListSize - paginationCounter - 1;
-        }
-        console.log("reached end of list")
-        endOfListReached = true;
+function setNextPrev(xmlDoc) {
+    if (typeof xmlDoc.getElementsByTagName("memberListWrapper")[0].getElementsByTagName("urlNext")[0].childNodes[0] == 'undefined') {
+        urlNext = null;
     } else {
-        console.log("not end of list")
-        endOfListReached = false;
+        urlNext = xmlDoc.getElementsByTagName("memberListWrapper")[0].getElementsByTagName("urlNext")[0].childNodes[0].nodeValue;
     }
-    if ((paginationCounter - size) < 0) {
-        if (!isNext) {
-            size = paginationCounter - size;
-        }
-        beginningOfListReached = true;
-        console.log("reached beginning of list");
+
+    if(typeof xmlDoc.getElementsByTagName("memberListWrapper")[0].getElementsByTagName("urlPrev")[0].childNodes[0] == 'undefined') {
+        urlPrev = null;
     } else {
-        console.log("not beginning of list")
-        beginningOfListReached = false;
+        urlPrev = xmlDoc.getElementsByTagName("memberListWrapper")[0].getElementsByTagName("urlPrev")[0].childNodes[0].nodeValue;
     }
+    $('#nextBtn').toggle(urlNext != null);
+    $('#previousBtn').toggle(urlPrev != null);
 }
 
 function loadFunctions() {
-    loadMemberList(true, false);
+    loadInitialMemberList();
 }
 function notify(message) {
     toastr.success(message);
@@ -101,18 +89,18 @@ function submitForm() {
     xhttp.onreadystatechange = function () {
         if (this.status == 201) {
             $("#addMemberModal").modal('hide');
-            loadMemberList();
+            loadInitialMemberList();
             toastr.info("Success", "Member created successfully");
-        } else if (this.status < 550 && this.status > 250) {
+        } else if (this.status < 550 && this.status >= 300) {
             toastr.error("Error", "Issue creating member. " + this.responseText);
         }
 
     };
-    var url = "http://localhost:8000/service/members";
+    var query = "?email=" + document.getElementById("email").value + "&belt=" + encodeURI(selectedText) + "&fees=" + document.getElementById("fees").value;
+    var url = "http://localhost:8000/service/members" + query;
     xhttp.open("POST", url, true);
-    var info = "email=" + document.getElementById("email").value + "&belt=" + encodeURI(selectedText) + "&fees=" + document.getElementById("fees").value;
-    console.log(info);
-    xhttp.send(info);
+    console.log(url);
+    xhttp.send();
 }
 
 $(document).ready(function () {
@@ -179,5 +167,4 @@ $('#belt').change(function () {
     selectedText = $(this).find("option:selected").text();
 });
 
-$("#nextBtn").toggle(!endOfListReached);
-$("#previousBtn").toggle(!beginningOfListReached);
+

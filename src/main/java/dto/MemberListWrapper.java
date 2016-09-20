@@ -16,16 +16,20 @@ public class MemberListWrapper implements Serializable{
     @XmlElement(name = "queriedMember")
     protected List<Member> queriedMembers;
 
-    @XmlElement
-    protected int totalListSize;
+    @XmlElement(name = "urlNext")
+    protected String urlNext;
+
+    @XmlElement (name = "urlPrev")
+    protected String urlPrev;
 
     public MemberListWrapper() {
 
     }
 
-    public MemberListWrapper(List<Member> queriedMembers) {
+    public MemberListWrapper(List<Member> queriedMembers, String urlNext, String urlPrev) {
         this.queriedMembers = queriedMembers;
-        this.totalListSize = queriedMembers.size();
+        this.urlNext = urlNext;
+        this.urlPrev = urlPrev;
     }
 
 
@@ -33,14 +37,24 @@ public class MemberListWrapper implements Serializable{
         this.queriedMembers = queriedMembers;
     }
 
-    public int getTotalListSize() {
-        return totalListSize;
-    }
-
-    public void setTotalListSize(int totalListSize) {
-        this.totalListSize = totalListSize;
-    }
     public List<Member> getQueriedMembers() {
         return queriedMembers;
     }
+
+    public String getUrlNext() {
+        return urlNext;
+    }
+
+    public void setUrlNext(String urlNext) {
+        this.urlNext = urlNext;
+    }
+
+    public String getUrlPrev() {
+        return urlPrev;
+    }
+
+    public void setUrlPrev(String urlPrev) {
+        this.urlPrev = urlPrev;
+    }
+
 }
