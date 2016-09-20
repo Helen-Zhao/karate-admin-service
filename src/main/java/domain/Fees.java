@@ -5,6 +5,12 @@ import java.io.Serializable;
 
 /**
  * Created by helen on 15/09/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 
 @Embeddable
@@ -19,7 +25,7 @@ public class Fees implements Serializable {
     public Fees(double outstandingBalance) {
         this.outstandingBalance = outstandingBalance;
     }
-    
+
     void chargeFees(double toCharge) {
         outstandingBalance += toCharge;
     }

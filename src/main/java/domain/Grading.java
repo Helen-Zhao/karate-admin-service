@@ -11,6 +11,12 @@ import java.util.List;
 
 /**
  * Created by helen on 15/09/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 
 @Entity

@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -27,6 +26,12 @@ import static org.junit.Assert.*;
 
 /**
  * Created by helen on 15/09/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 public class SessionWebServiceTest {
     private static final String WEB_SERVICE_URI = "http://localhost:8000/service/sessions";
@@ -104,7 +109,7 @@ public class SessionWebServiceTest {
                         32324,
                         "jssj333",
                         false
-        ));
+                ));
 
         //update session
         Response response = _client
@@ -112,7 +117,7 @@ public class SessionWebServiceTest {
                 .request()
                 .put(Entity.entity(session, MediaType.APPLICATION_XML));
 
-        if  (response.getStatus() != 204) {
+        if (response.getStatus() != 204) {
             fail("Failed to update session");
         }
 
@@ -126,11 +131,5 @@ public class SessionWebServiceTest {
         assertEquals(session.getDate(), updatedSession.getDate());
         assertEquals(session.getAttendees().get(0).getId(), updatedSession.getAttendees().get(0).getId());
     }
-
-
-
-
-
-
 
 }

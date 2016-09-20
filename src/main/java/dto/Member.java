@@ -8,6 +8,12 @@ import javax.xml.bind.annotation.*;
 
 /**
  * Created by helen on 30/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 
 @XmlType(name = "dtoMember")

@@ -17,6 +17,12 @@ import java.util.Set;
 
 /**
  * Created by helen on 29/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 public class KarateAdminApplication extends Application {
 

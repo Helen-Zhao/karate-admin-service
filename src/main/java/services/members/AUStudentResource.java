@@ -1,7 +1,6 @@
 package services.members;
 
 import domain.AUStudent;
-import domain.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
@@ -21,6 +20,12 @@ import java.util.stream.Collectors;
 
 /**
  * Created by helen on 29/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 @Path("service/students")
 public class AUStudentResource {
@@ -41,7 +46,7 @@ public class AUStudentResource {
         }
 
         AUStudent auStudent;
-        if (_AUStudentDB.containsKey(id)&& !ignoreCache) {
+        if (_AUStudentDB.containsKey(id) && !ignoreCache) {
             auStudent = _AUStudentDB.get(id);
         } else {
             auStudent = em.find(AUStudent.class, id);
@@ -84,19 +89,13 @@ public class AUStudentResource {
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateAUStudent(
             dto.AUStudent dtoAUStudent) {
-        // Get the Parolee object from the database.
 
-        // Update the Parolee object in the database based on the data in
-        // dtoAUStudent.
         AUStudent AUStudent = AUStudentMapper.toDomainModel(dtoAUStudent);
         em.merge(AUStudent);
 
         _AUStudentDB.remove(dtoAUStudent.getId());
 
         return Response.noContent().build();
-
-        // JAX-RS will add the default response code (204 No Content) to the
-        // HTTP response message.
 
     }
 
@@ -105,7 +104,7 @@ public class AUStudentResource {
     public Response deleteStudent(@PathParam("id") long id) {
         AUStudent auStudent = em.find(AUStudent.class, id);
 
-        if(auStudent == null) {
+        if (auStudent == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 

@@ -1,20 +1,24 @@
 package dto;
 
 import domain.Fees;
-import domain.Session;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.xml.bind.annotation.*;
-import java.util.List;
 
 /**
  * Created by helen on 30/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 
 @XmlRootElement(name = "student")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class AUStudent extends Member{
+public class AUStudent extends Member {
 
     @XmlElement(name = "auid", required = true)
     private int auid;
@@ -38,6 +42,7 @@ public class AUStudent extends Member{
                      boolean paidAnnualFee) {
         this.email = email;
         this.belt = belt;
+        this.fees = fees;
         this.auid = auid;
         this.upi = upi;
         this.paidAnnualFee = paidAnnualFee;

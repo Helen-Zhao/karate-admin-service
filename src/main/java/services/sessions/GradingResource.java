@@ -18,6 +18,14 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
+ */
+
 @Path("service/gradings")
 public class GradingResource {
     @PersistenceContext
@@ -92,9 +100,6 @@ public class GradingResource {
 
         return Response.noContent().build();
 
-        // JAX-RS will add the default response code (204 No Content) to the
-        // HTTP response message.
-
     }
 
 
@@ -110,7 +115,7 @@ public class GradingResource {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        if(grading == null) {
+        if (grading == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         } else {
             gradingDB.remove(grading.getDate());
