@@ -1,5 +1,7 @@
 package domain;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * Created by helen on 20/09/2016.
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Invoice implements Serializable{
 
     private static final double STUDENT_FEES_PER_SEMESTER = 70.0d;
@@ -22,6 +25,10 @@ public class Invoice implements Serializable{
     private double balanceDueThisPeriod;
     @XmlElement
     private double startingBalance;
+
+    public Invoice() {
+
+    }
 
     public Invoice(Member member, InvoicePeriod invoicePeriod) {
         this.member = member;

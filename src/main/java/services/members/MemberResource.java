@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.container.Suspended;
+import javax.ws.rs.container.TimeoutHandler;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -69,7 +71,14 @@ public class MemberResource {
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_XML)
     public void generateInvoice(@Suspended AsyncResponse response, @PathParam("id") long id) {
+        response.setTimeout(100000000000l, TimeUnit.HOURS);
+        response.setTimeoutHandler(new TimeoutHandler() {
 
+            @Override
+            public void handleTimeout(AsyncResponse asyncResponse) {
+
+            }
+        });
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -79,21 +88,6 @@ public class MemberResource {
                 response.resume(invoice);
             }
         });
-    }
-
-    @GET
-    @Path("/fees")
-    public void subscribe(@Suspended AsyncResponse response) {
-        responses.add(response);
-    }
-
-    @POST
-    @Consumes(MediaType.TEXT_PLAIN)
-    public void send(String message) {
-        for (AsyncResponse response : responses) {
-            response.resume(message);
-        }
-    responses.clear();
     }
 
 

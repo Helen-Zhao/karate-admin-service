@@ -206,31 +206,6 @@ public class MemberWebServiceTest {
 
     }
 
-    @Test
-    public void asyncPubSub() {
-        Future<String> msg = _client.target(WEB_SERVICE_URI + "/fees")
-                .request()
-                .async()
-                .get(new InvocationCallback<String>() {
-                    @Override
-                    public void completed(String s) {
-                        _client.target(WEB_SERVICE_URI + "/fees").request().async().get(this);
-                    }
-
-                    @Override
-                    public void failed(Throwable throwable) {
-
-                    }
-                });
-        try {
-            String m = msg.get();
-            _logger.info("FINDME:" + m);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
     @Test
     public void asyncTest() {
@@ -268,9 +243,8 @@ public class MemberWebServiceTest {
         while (!responseFuture.isDone()) {
             try {
                 Response responseNow = responseFuture.get();
-                _logger.info(responseNow.toString());
                 Invoice invoice = responseNow.readEntity(Invoice.class);
-                _logger.info("invoice=" + invoice);
+                assertEquals(dtoMember, invoice.getMember());
             } catch (Exception e) {
                 e.printStackTrace();
             }
