@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -26,6 +25,12 @@ import static org.junit.Assert.fail;
 
 /**
  * Created by helen on 15/09/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 public class GradingWebServiceTest {
     private static final String WEB_SERVICE_URI = "http://localhost:8000/service/gradings";
@@ -107,7 +112,7 @@ public class GradingWebServiceTest {
                 .request()
                 .put(Entity.entity(newGrading, MediaType.APPLICATION_XML));
 
-        if  (response1.getStatus() != 204) {
+        if (response1.getStatus() != 204) {
             fail("Failed to update grading");
         }
 

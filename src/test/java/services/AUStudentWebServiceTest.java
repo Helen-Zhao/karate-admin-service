@@ -3,19 +3,13 @@ package services;
 import domain.AUStudent;
 import domain.Belt;
 import domain.Fees;
-import dto.Member;
-import org.jboss.resteasy.util.GenericType;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.members.AUStudentMapper;
-import services.members.MemberMapper;
 
-import javax.persistence.Query;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -23,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,6 +25,12 @@ import static org.junit.Assert.fail;
 
 /**
  * Created by helen on 30/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 public class AUStudentWebServiceTest {
     private static final String WEB_SERVICE_URI = "http://localhost:8000/service/students";
@@ -112,7 +111,7 @@ public class AUStudentWebServiceTest {
 
         );
 
-        dto.AUStudent dtoStudent= AUStudentMapper.toDto(student);
+        dto.AUStudent dtoStudent = AUStudentMapper.toDto(student);
 
         Response response = _client.
                 target(WEB_SERVICE_URI)
@@ -167,7 +166,8 @@ public class AUStudentWebServiceTest {
 
     @Test
     public void getAllStudents() {
-        javax.ws.rs.core.GenericType<List<dto.AUStudent>> list = new javax.ws.rs.core.GenericType<List<dto.AUStudent>>() {};
+        javax.ws.rs.core.GenericType<List<dto.AUStudent>> list = new javax.ws.rs.core.GenericType<List<dto.AUStudent>>() {
+        };
         List<dto.AUStudent> students = _client.target(WEB_SERVICE_URI)
                 .request()
                 .accept(MediaType.APPLICATION_XML)
@@ -176,6 +176,5 @@ public class AUStudentWebServiceTest {
         _logger.info("" + students.size());
         assertTrue(students != null && students.size() > 0);
     }
-
 
 }

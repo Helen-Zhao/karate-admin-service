@@ -3,12 +3,15 @@ package domain;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by helen on 29/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 
 @Entity
@@ -19,7 +22,8 @@ public class AUStudent extends Member implements Serializable {
     private String upi;
     private boolean paidAnnualFee;
 
-    public AUStudent() {}
+    public AUStudent() {
+    }
 
 
     public AUStudent(String email, Belt belt, Fees fees, int auid, String upi, boolean paidAnnualFee) {

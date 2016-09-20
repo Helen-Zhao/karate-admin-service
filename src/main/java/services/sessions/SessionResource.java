@@ -1,11 +1,9 @@
 package services.sessions;
 
-import domain.Member;
 import domain.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.PersistenceManager;
-import services.members.MemberMapper;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +17,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
+ */
 
 @Path("service/sessions")
 public class SessionResource {
@@ -95,9 +101,6 @@ public class SessionResource {
 
         return Response.noContent().build();
 
-        // JAX-RS will add the default response code (204 No Content) to the
-        // HTTP response message.
-
     }
 
     @DELETE
@@ -112,7 +115,7 @@ public class SessionResource {
             throw new WebApplicationException(Response.Status.BAD_REQUEST);
         }
 
-        if(session == null) {
+        if (session == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         } else {
             sessionDB.remove(session.getDate());

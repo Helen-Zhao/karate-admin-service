@@ -1,4 +1,4 @@
-package services.sessions;
+package services;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -19,13 +19,13 @@ import javax.xml.bind.JAXBException;
 
 @Provider
 @Produces(MediaType.APPLICATION_XML)
-public class SessionResolver implements ContextResolver<JAXBContext> {
+public class InvoiceResolver implements ContextResolver<JAXBContext> {
 
     private JAXBContext _context;
 
-    public SessionResolver() {
+    public InvoiceResolver() {
         try {
-            _context = JAXBContext.newInstance(domain.Session.class);
+            _context = JAXBContext.newInstance(domain.Invoice.class);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class SessionResolver implements ContextResolver<JAXBContext> {
 
     @Override
     public JAXBContext getContext(Class<?> type) {
-        if (type.equals(domain.Session.class)) {
+        if (type.equals(domain.Invoice.class)) {
             return _context;
         } else {
             return null;

@@ -8,10 +8,18 @@ import java.io.Serializable;
 
 /**
  * Created by helen on 20/09/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
+
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Invoice implements Serializable{
+public class Invoice implements Serializable {
 
     private static final double STUDENT_FEES_PER_SEMESTER = 70.0d;
     private static final double ANNUAL_STUDENT_MEMBERSHIP_FEE = 5.0d;
@@ -70,7 +78,6 @@ public class Invoice implements Serializable{
     public void setBalanceDueThisPeriod(double balanceDueThisPeriod) {
         this.balanceDueThisPeriod = balanceDueThisPeriod;
     }
-
 
 
 }

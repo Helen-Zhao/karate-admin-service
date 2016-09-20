@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.members.MemberMapper;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
@@ -26,6 +25,12 @@ import static org.junit.Assert.fail;
 
 /**
  * Created by helen on 30/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 public class MemberWebServiceTest {
     private static final String WEB_SERVICE_URI = "http://localhost:8000/service/members";

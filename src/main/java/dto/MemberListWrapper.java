@@ -6,11 +6,17 @@ import java.util.List;
 
 /**
  * Created by helen on 19/09/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class MemberListWrapper implements Serializable{
+public class MemberListWrapper implements Serializable {
 
     @XmlElementWrapper(name = "queriedMembers")
     @XmlElement(name = "queriedMember")
@@ -19,7 +25,7 @@ public class MemberListWrapper implements Serializable{
     @XmlElement(name = "urlNext")
     protected String urlNext;
 
-    @XmlElement (name = "urlPrev")
+    @XmlElement(name = "urlPrev")
     protected String urlPrev;
 
     public MemberListWrapper() {

@@ -28,7 +28,14 @@ import java.util.stream.Collectors;
 
 /**
  * Created by helen on 29/08/2016.
+ * <p>
+ * Name: Helen Zhao
+ * UPI: hzha587
+ * AUID: 6913580
+ * <p>
+ * SOFTENG 325 ASSIGNMENT 1 MAIN
  */
+
 @Path("service/members")
 public class MemberResource {
     @PersistenceContext
@@ -141,7 +148,7 @@ public class MemberResource {
             end = dtoMembers.size();
         }
 
-        _logger.info("start=" + start +  " end=" + end);
+        _logger.info("start=" + start + " end=" + end);
 
         List<dto.Member> wantedMembers = new ArrayList<>();
         for (int i = start; i < end; i++) {
@@ -189,19 +196,13 @@ public class MemberResource {
     @Consumes(MediaType.APPLICATION_XML)
     public Response updateMember(
             dto.Member dtoMember) {
-        // Get the Parolee object from the database.
 
-        // Update the Parolee object in the database based on the data in
-        // dtoMember.
         Member member = MemberMapper.toDomainModel(dtoMember);
         em.merge(member);
 
         _memberDB.remove(dtoMember.getId());
 
         return Response.noContent().build();
-
-        // JAX-RS will add the default response code (204 No Content) to the
-        // HTTP response message.
 
     }
 
@@ -210,7 +211,7 @@ public class MemberResource {
     public Response deleteMember(@PathParam("id") long id) {
         Member member = em.find(Member.class, id);
 
-        if(member == null) {
+        if (member == null) {
             throw new WebApplicationException(Response.Status.NOT_FOUND);
         }
 
