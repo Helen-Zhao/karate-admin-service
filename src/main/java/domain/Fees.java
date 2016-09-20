@@ -19,8 +19,7 @@ public class Fees implements Serializable {
     public Fees(double outstandingBalance) {
         this.outstandingBalance = outstandingBalance;
     }
-
-
+    
     void chargeFees(double toCharge) {
         outstandingBalance += toCharge;
     }

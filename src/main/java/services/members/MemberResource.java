@@ -1,7 +1,6 @@
 package services.members;
 
-import domain.Fees;
-import domain.Member;
+import domain.*;
 import dto.MemberListWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +10,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.*;
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +32,8 @@ public class MemberResource {
     @PersistenceContext
     EntityManager em = PersistenceManager.instance().createEntityManager();
 
+    private Executor executor = Executors.newSingleThreadExecutor();
+    private List<AsyncResponse> responses = new ArrayList<>();
 
     private static final Logger _logger = LoggerFactory.getLogger(MemberResource.class);
     private Map<Long, Member> _memberDB = new ConcurrentHashMap<Long, Member>();
@@ -59,16 +64,38 @@ public class MemberResource {
         return MemberMapper.toDto(member);
     }
 
-//    @GET
-//    @Produces(MediaType.APPLICATION_XML)
-//    public List<dto.Member> getQueriedMembers() {
-//        Query query = em.createQuery("SELECT m from Member m");
-//        List<Member> queriedMembers = query.getResultList();
-//        List<dto.Member> dtoMembers = queriedMembers.stream()
-//                .map(e -> MemberMapper.toDto(e))
-//                .collect(Collectors.toList());
-//        return dtoMembers;
-//    }
+    @GET
+    @Path("/{id}/invoice")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_XML)
+    public void generateInvoice(@Suspended AsyncResponse response, @PathParam("id") long id) {
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Member member = em.find(Member.class, id);
+                _logger.info(member.toString());
+                Invoice invoice = new Invoice(member, member instanceof AUStudent ? InvoicePeriod.SEMESTER : InvoicePeriod.MONTH);
+                response.resume(invoice);
+            }
+        });
+    }
+
+    @GET
+    @Path("/fees")
+    public void subscribe(@Suspended AsyncResponse response) {
+        responses.add(response);
+    }
+
+    @POST
+    @Consumes(MediaType.TEXT_PLAIN)
+    public void send(String message) {
+        for (AsyncResponse response : responses) {
+            response.resume(message);
+        }
+    responses.clear();
+    }
+
 
     @GET
     @Produces(MediaType.APPLICATION_XML)

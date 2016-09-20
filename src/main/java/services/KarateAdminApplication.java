@@ -4,6 +4,7 @@ import services.members.AUStudentResolver;
 import services.members.AUStudentResource;
 import services.members.MemberResolver;
 import services.members.MemberResource;
+import services.sessions.GradingResolver;
 import services.sessions.GradingResource;
 import services.sessions.SessionResolver;
 import services.sessions.SessionResource;
@@ -39,6 +40,7 @@ public class KarateAdminApplication extends Application {
         classes.add(MemberResolver.class);
         classes.add(AUStudentResolver.class);
         classes.add(SessionResolver.class);
+        classes.add(GradingResolver.class);
     }
 
     @Override

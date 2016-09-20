@@ -1,6 +1,7 @@
 package services;
 
 import domain.Belt;
+import domain.Invoice;
 import domain.Member;
 import dto.MemberListWrapper;
 import org.junit.AfterClass;
@@ -10,13 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.members.MemberMapper;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -158,7 +159,7 @@ public class MemberWebServiceTest {
         assertTrue(members.size() > 0);
     }
 
-    @Test (expected = WebApplicationException.class)
+    @Test(expected = WebApplicationException.class)
     public void deleteMember() {
         Member member = new Member(
                 "goingToBeDeleted@something.com",
@@ -184,8 +185,6 @@ public class MemberWebServiceTest {
                 .accept(MediaType.APPLICATION_XML)
                 .get(dto.Member.class);
 
-
-
         /**
          * Member from service now exists and we can delete it with the ID we got back
          */
@@ -204,6 +203,79 @@ public class MemberWebServiceTest {
                 .get(dto.Member.class);
 
         _logger.info(shouldntExist.getEmail());
+
+    }
+
+    @Test
+    public void asyncPubSub() {
+        Future<String> msg = _client.target(WEB_SERVICE_URI + "/fees")
+                .request()
+                .async()
+                .get(new InvocationCallback<String>() {
+                    @Override
+                    public void completed(String s) {
+                        _client.target(WEB_SERVICE_URI + "/fees").request().async().get(this);
+                    }
+
+                    @Override
+                    public void failed(Throwable throwable) {
+
+                    }
+                });
+        try {
+            String m = msg.get();
+            _logger.info("FINDME:" + m);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    @Test
+    public void asyncTest() {
+        Member member = new Member(
+                "timeToPay@something.com",
+                Belt.BLUE
+        );
+
+        dto.Member dtoMember = MemberMapper.toDto(member);
+
+        Response response = _client.
+                target(WEB_SERVICE_URI)
+                .request()
+                .post(Entity.entity(dtoMember, MediaType.APPLICATION_XML));
+
+        if (response.getStatus() != 201) {
+            fail("Failed to create new Member");
+        }
+
+        String location = response.getLocation().toString();
+        response.close();
+
+        dto.Member dtoMemberFromService = _client.target(location)
+                .request()
+                .accept(MediaType.APPLICATION_XML)
+                .get(dto.Member.class);
+
+        Client client = ClientBuilder.newClient();
+
+        final Future<Response> responseFuture = client
+                .target(WEB_SERVICE_URI + "/" + dtoMemberFromService.getId() + "/invoice").request()
+                .async()
+                .get();
+
+        while (!responseFuture.isDone()) {
+            try {
+                Response responseNow = responseFuture.get();
+                _logger.info(responseNow.toString());
+                Invoice invoice = responseNow.readEntity(Invoice.class);
+                _logger.info("invoice=" + invoice);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
 
