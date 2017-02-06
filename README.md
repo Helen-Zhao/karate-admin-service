@@ -1,13 +1,5 @@
 # karate-admin-service
 
-Name: Helen Zhao
-
-UPI: hzha587
-
-AUID: 6913580
-
-##SOFTENG 325 ASSIGNMENT 1 MAIN
-
 ###Building, Deploying and Testing
 Running the maven goals clean and install will build, deploy and test the project. The database is set to `jdbc:h2:~/hello`. The port used for HTTP requests/the AJAX client is `localhost:8000`. All services are accessed with the URL prefix `localhost:8000/service`.
 
