@@ -1,5 +1,6 @@
 # karate-admin-service
 
+A RESTful web application developed using the JAX-RS/Java for the back end API and simple HTML/CSS for the front end. XML/JAXB was used for data transfer and serialisation, Hibernate/ embedded h2 was used for database object storage/serialisation.
 ###Building, Deploying and Testing
 Running the maven goals clean and install will build, deploy and test the project. The database is set to `jdbc:h2:~/hello`. The port used for HTTP requests/the AJAX client is `localhost:8000`. All services are accessed with the URL prefix `localhost:8000/service`.
 
